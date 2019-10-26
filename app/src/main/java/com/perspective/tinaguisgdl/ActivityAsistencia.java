@@ -115,6 +115,7 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
                 "where c.id = " + idTianguis;
         Log.v("sql",sql);
         Cursor cursor = this.db.rawQuery(sql,null);
+        permisionario.clear();
         permisionario.add("");
         if(cursor.moveToFirst()) {
             Log.v("if","entro");
@@ -124,5 +125,6 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
         }
         cursor.close();
         adapterC.notifyDataSetChanged();
+        spPermisionario.setSelection(0);
     }
 }
