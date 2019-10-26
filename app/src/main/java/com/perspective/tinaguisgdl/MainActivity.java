@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button btn_Asistencia = findViewById(R.id.btnAsistencia);
+        Button btn_Asistencia = findViewById(R.id.btn_Asistencia);
         CardView Cardview_Faltas = findViewById(R.id.cardview);
         cvActualizar = findViewById(R.id.cvActualizar);
 

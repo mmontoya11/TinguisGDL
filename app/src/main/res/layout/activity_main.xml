@@ -106,7 +106,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="ir"
-                        android:id="@+id/btnAsistencia"
+                        android:id="@+id/btn_Asistencia"
                         android:background="@drawable/btn_rounded"
                         android:textColor="#ffff"
                         android:textSize="18dp"

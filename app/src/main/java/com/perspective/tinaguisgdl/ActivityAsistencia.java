@@ -92,9 +92,9 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
 
                 break;
 
-                default:
+            default:
 
-                    break;
+                break;
         }
     }
 
