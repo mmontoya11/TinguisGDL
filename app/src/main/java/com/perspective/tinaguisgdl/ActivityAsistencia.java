@@ -1,13 +1,18 @@
 package com.perspective.tinaguisgdl;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -33,12 +38,28 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
         setContentView(R.layout.activity_asistencia);
 
 
-        ImageView imageView = findViewById(R.id.btn_serch);
+        final Context context = getApplicationContext();
+        Button btn_AdminComer = findViewById(R.id.btn_administrar);
+        ImageView btn_BuscarComerciante = findViewById(R.id.btn_serch);
 
-        imageView.setOnClickListener(new View.OnClickListener() {
+
+
+
+
+        btn_BuscarComerciante.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(ActivityAsistencia.this,"Esto es una prueba",Toast.LENGTH_LONG).show();
+                Toast.makeText(ActivityAsistencia.this,"Buscando comerciante",Toast.LENGTH_LONG).show();
+            }
+        });
+
+
+
+
+        btn_AdminComer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialogAdminComer();
             }
         });
 
@@ -100,6 +121,18 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+
+    private void showDialogAdminComer(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(ActivityAsistencia.this);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.dialog_admin_comerciante, null);
+        builder.setView(view);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
 
     }
 }
