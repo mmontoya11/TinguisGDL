@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Gestion de Tianguis</string>
+    <string name="title_activity_asistencia">Toma de Asistencia</string>
+    <string name="serch_box"><i>Busque un comerciante...</i></string>
+</resources>

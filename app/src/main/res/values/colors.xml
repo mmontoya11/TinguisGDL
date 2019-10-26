@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#5b6770</color>
+    <color name="colorPrimaryDark">#313d45</color>
+    <color name="colorAccent">#408adf</color>
+    <color name="GrisOscuro">#5b6770</color>
+    <color name="GrisClaro">#e6e6e7</color>
+    <color name="AzulMayate">#48a7cf</color>
+    <color name="Aqua">#60bcba</color>
+    <color name="AzulRey">#408adf</color>
+
+</resources>
