@@ -30,7 +30,9 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
     private List<Tianguis> tianguis = null;
     private List<String> tia = null;
     private List<Integer> idTia = null;
-    private ArrayAdapter<String> adapter = null,adapterId = null;
+    private ArrayAdapter<String> adapter = null,adapterC = null;
+    private SQLiteDatabase db = null;
+    private List<String> permisionario = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +72,7 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
         spPermisionario.setOnItemSelectedListener(this);
 
         gestionBD = new GestionBD(getApplicationContext(),"TianguisGDL",null,MainActivity.VERSION);
-        SQLiteDatabase db = gestionBD.getReadableDatabase();
+        db = gestionBD.getReadableDatabase();
 
         String sql = "select * from " + GestionBD.TABLE_PERMISIONARIO;
         Log.v("sql",sql);
@@ -95,9 +97,12 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
             idTia.add(tianguis.get(i).getId());
         }
 
+        permisionario = new ArrayList<String>();
         adapter = new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_activated_1,tia);
+        adapterC = new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_activated_1,permisionario);
 
         spTianguis.setAdapter(adapter);
+        spPermisionario.setAdapter(adapterC);
     }
 
     @Override
@@ -105,7 +110,7 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
         switch (parent.getId()) {
             case R.id.spTianguis:
                 if(position > 0) {
-
+                    consultarComerciante(idTia.get(position));
                 }
                 break;
 
@@ -124,7 +129,6 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
 
     }
 
-
     private void showDialogAdminComer(){
         AlertDialog.Builder builder = new AlertDialog.Builder(ActivityAsistencia.this);
         LayoutInflater inflater = getLayoutInflater();
@@ -132,7 +136,26 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
         builder.setView(view);
         AlertDialog dialog = builder.create();
         dialog.show();
-
+    }
+    public void consultarComerciante(int idTianguis) {
+        String sql = "select a.* from " + GestionBD.TABLE_PERMISIONARIO + " a " +
+                "join " + GestionBD.TABLE_PUESTO + " b on a.id=b.iPERMISIO " +
+                "join " + GestionBD.TABLE_C_TIANGUIS + " c on b.smlTIANGUIS=c.id " +
+                "where c.id = " + idTianguis;
+        Log.v("sql",sql);
+        Cursor cursor = this.db.rawQuery(sql,null);
+        permisionario.clear();
+        permisionario.add("");
+        if(cursor.moveToFirst()) {
+            Log.v("if","entro");
+            do {
+                permisionario.add(cursor.getString(cursor.getColumnIndex("nombres")) + " " + cursor.getString(cursor.getColumnIndex("apellidoP")) + " " + cursor.getString(cursor.getColumnIndex("apellidoP")));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        adapterC.notifyDataSetChanged();
+        spPermisionario.setSelection(0);
 
     }
+
 }
