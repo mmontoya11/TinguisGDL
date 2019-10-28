@@ -1,6 +1,5 @@
 package com.perspective.tinaguisgdl;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -17,12 +16,10 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.perspective.tinaguisgdl.DB.GestionBD;
 import com.perspective.tinaguisgdl.Model.Tianguis;
-
-import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class ActivityAsistencia extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -36,6 +33,9 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
     private SQLiteDatabase db = null;
     private List<String> permisionario = null;
     private TextView tvTianguis,tvFecha,tvNombre,tvGiro,tvMetros;
+    private List<Integer> idPermisionario;
+    private Calendar calendar = null;
+    private String fecha = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,18 +47,12 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
         Button btn_AdminComer = findViewById(R.id.btn_administrar);
         ImageView btn_BuscarComerciante = findViewById(R.id.btn_serch);
 
-
-
-
-
         btn_BuscarComerciante.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(ActivityAsistencia.this,"Buscando comerciante",Toast.LENGTH_LONG).show();
             }
         });
-
-
 
 
         btn_AdminComer.setOnClickListener(new View.OnClickListener() {
@@ -72,6 +66,16 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
         spPermisionario = findViewById(R.id.spPermisionario);
         tvTianguis = findViewById(R.id.tvTianguis);
         tvFecha = findViewById(R.id.tvFecha);
+        tvNombre = findViewById(R.id.tvPermisionario);
+        tvGiro = findViewById(R.id.tvGiro);
+        tvMetros = findViewById(R.id.tvMetros);
+
+        tvTianguis.setText("");
+        tvFecha.setText("");
+        tvNombre.setText("");
+        tvGiro.setText("");
+        tvMetros.setText("");
+
 
         spTianguis.setOnItemSelectedListener(this);
         spPermisionario.setOnItemSelectedListener(this);
@@ -103,11 +107,18 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
         }
 
         permisionario = new ArrayList<String>();
+        idPermisionario = new ArrayList<Integer>();
         adapter = new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_activated_1,tia);
         adapterC = new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_activated_1,permisionario);
 
         spTianguis.setAdapter(adapter);
         spPermisionario.setAdapter(adapterC);
+
+        calendar = Calendar.getInstance();
+        fecha = calendar.get(Calendar.DAY_OF_MONTH) + "/" + (calendar.get(Calendar.MONTH)+1) + "/" + calendar.get(Calendar.YEAR);
+
+        tvFecha.setText(fecha);
+
     }
 
     @Override
@@ -116,11 +127,15 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
             case R.id.spTianguis:
                 if(position > 0) {
                     consultarComerciante(idTia.get(position));
+                    tvTianguis.setText("Tianguis " + spTianguis.getSelectedItem().toString() + " del ");
                 }
                 break;
 
             case R.id.spPermisionario:
-
+                if(position > 0) {
+                    Log.v("spPermisionario",position + "");
+                    datosPermisionario(idTia.get(spTianguis.getSelectedItemPosition()),idPermisionario.get(position));
+                }
                 break;
 
             default:
@@ -151,16 +166,42 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
         Cursor cursor = this.db.rawQuery(sql,null);
         permisionario.clear();
         permisionario.add("");
+        idPermisionario.clear();
+        idPermisionario.add(0);
         if(cursor.moveToFirst()) {
             Log.v("if","entro");
             do {
                 permisionario.add(cursor.getString(cursor.getColumnIndex("nombres")) + " " + cursor.getString(cursor.getColumnIndex("apellidoP")) + " " + cursor.getString(cursor.getColumnIndex("apellidoP")));
+                idPermisionario.add(cursor.getInt(cursor.getColumnIndex("id")));
             } while (cursor.moveToNext());
         }
         cursor.close();
         adapterC.notifyDataSetChanged();
         spPermisionario.setSelection(0);
 
+    }
+
+    public void datosPermisionario(int idTianguis , int idPermisionario) {
+
+        String sql = "SELECT distinct a.id,a.nombres,a.apellidoP,a.apellidoM,b.smmLONGITUD,d.vchGiroComercial FROM " + GestionBD.TABLE_PERMISIONARIO + " a " +
+                "join " + gestionBD.TABLE_PUESTO + " b on a.id=b.iPERMISIO " +
+                "join " + gestionBD.TABLE_C_TIANGUIS + " c on b.smlTIANGUIS=c.id " +
+                "join " + GestionBD.TABLE_C_GIROS_COMERCIALES + " d on b.smlGIRO1=d.id " +
+                "where c.id = " + idTianguis + " and a.id = " + idPermisionario;
+        Log.v("sql",sql);
+        Cursor cursor = this.db.rawQuery(sql,null);
+        Log.v("total",cursor.getCount() + " total");
+        tvNombre.setText("");
+        tvGiro.setText("");
+        tvMetros.setText("");
+        if(cursor.moveToFirst()){
+            do{
+                Log.v("datos",cursor.getString(cursor.getColumnIndex("id")));
+                tvNombre.setText(cursor.getString(cursor.getColumnIndex("nombres")) + " " + cursor.getString(cursor.getColumnIndex("apellidoP")) + " "+ cursor.getString(cursor.getColumnIndex("apellidoM")));
+                tvGiro.setText(cursor.getString(cursor.getColumnIndex("vchGiroComercial")));
+                tvMetros.setText("" + cursor.getDouble(cursor.getColumnIndex("smmLONGITUD")));
+            }while (cursor.moveToNext());
+        }
     }
 
 }
