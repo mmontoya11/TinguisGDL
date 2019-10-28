@@ -1,8 +1,11 @@
 package com.perspective.tinaguisgdl;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -44,7 +47,7 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
 
 
         final Context context = getApplicationContext();
-        Button btn_AdminComer = findViewById(R.id.btn_administrar);
+        Button btn_AdminComer = findViewById(R.id.btn_rolero);
         ImageView btn_BuscarComerciante = findViewById(R.id.btn_serch);
 
         btn_BuscarComerciante.setOnClickListener(new View.OnClickListener() {
@@ -97,7 +100,7 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
         tia = new ArrayList<String>();
         idTia = new ArrayList<Integer>();
 
-        tia.add("");
+        tia.add("Seleccione su comerciante");
         idTia.add(0);
 
         for (int i = 0;i<tianguis.size();i++){
@@ -107,9 +110,11 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
         }
 
         permisionario = new ArrayList<String>();
+        adapter = new ArrayAdapter<String>(getApplicationContext(),R.layout.spinner_color_layout,tia);
+        adapterC = new ArrayAdapter<String>(getApplicationContext(),R.layout.spinner_dropdown_layout,permisionario);
         idPermisionario = new ArrayList<Integer>();
-        adapter = new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_activated_1,tia);
-        adapterC = new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_activated_1,permisionario);
+
+
 
         spTianguis.setAdapter(adapter);
         spPermisionario.setAdapter(adapterC);
@@ -155,8 +160,12 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
         View view = inflater.inflate(R.layout.dialog_admin_comerciante, null);
         builder.setView(view);
         AlertDialog dialog = builder.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
     }
+
+
+
     public void consultarComerciante(int idTianguis) {
         String sql = "select a.* from " + GestionBD.TABLE_PERMISIONARIO + " a " +
                 "join " + GestionBD.TABLE_PUESTO + " b on a.id=b.iPERMISIO " +
@@ -165,7 +174,7 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
         Log.v("sql",sql);
         Cursor cursor = this.db.rawQuery(sql,null);
         permisionario.clear();
-        permisionario.add("");
+        permisionario.add("Seleccione su comerciante");
         idPermisionario.clear();
         idPermisionario.add(0);
         if(cursor.moveToFirst()) {
