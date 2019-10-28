@@ -2,10 +2,28 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/dialog_rounded"
     >
+
+    <LinearLayout
+        android:background="@color/GrisOscuro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:textColor="@android:color/white"
+            android:layout_height="wrap_content"
+            android:textSize="21sp"
+            android:text="Modifique los datos del comerciante"/>
+
+    </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
@@ -19,6 +37,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
@@ -32,6 +51,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
@@ -42,8 +62,22 @@
             android:layout_height="wrap_content"
             android:text="7 Mts"/>
     </LinearLayout>
-
-
-
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:layout_width="300dp"
+            android:textColor="@android:color/white"
+            android:background="@drawable/btn_rounded_alt"
+            android:layout_height="wrap_content"
+            android:text="Cancelar"/>
+        <Button
+            android:textColor="@android:color/white"
+            android:layout_width="300dp"
+            android:background="@drawable/btn_rounded"
+            android:layout_height="wrap_content"
+            android:text="Aceptar"/>
+    </LinearLayout>
 </LinearLayout>
