@@ -169,7 +169,6 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
         idPermisionario.clear();
         idPermisionario.add(0);
         if(cursor.moveToFirst()) {
-            Log.v("if","entro");
             do {
                 permisionario.add(cursor.getString(cursor.getColumnIndex("nombres")) + " " + cursor.getString(cursor.getColumnIndex("apellidoP")) + " " + cursor.getString(cursor.getColumnIndex("apellidoP")));
                 idPermisionario.add(cursor.getInt(cursor.getColumnIndex("id")));
