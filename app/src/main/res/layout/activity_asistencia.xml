@@ -28,7 +28,7 @@
                 android:layout_width="wrap_content"
                 android:textStyle="bold"
                 android:layout_height="wrap_content"
-                android:text="Selecciones su tianguis"
+                android:text="TIANGUIS"
                 android:textColor="@android:color/black"/>
 
             <Spinner
@@ -51,7 +51,14 @@
             android:layout_width="match_parent"
             android:padding="16dp"
             android:layout_height="match_parent">
-
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginTop="15dp"
+                android:textColor="@android:color/black"
+                android:text="COMERCIANTE"/>
             <RelativeLayout
                 android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
@@ -74,17 +81,11 @@
                     android:src="@drawable/serch"/>
 
             </RelativeLayout>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_marginTop="15dp"
-                android:textColor="@android:color/black"
-                android:text="Seleccione su comerciante"/>
+
 
             <Spinner
                 android:id="@+id/spPermisionario"
+                android:layout_marginTop="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
@@ -212,13 +213,13 @@
                 android:textColor="@android:color/white"
                 android:text="Imprimir ticket"
                 android:background="@drawable/btn_rounded"/>
-            git s<Button
-                android:id="@+id/btn_administrar"
+            <Button
+                android:id="@+id/btn_rolero"
                 android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
-                android:text="Administrar comerciante"
+                android:text="ceder a un rolero"
                 android:background="@drawable/btn_rounded_alt"/>
 
         </LinearLayout>
