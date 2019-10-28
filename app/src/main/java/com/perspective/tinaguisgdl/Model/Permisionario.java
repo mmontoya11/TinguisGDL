@@ -1,4 +1,4 @@
-package com.pgm.tianguis.Model;
+package com.perspective.tinaguisgdl.Model;
 
 public class Permisionario {
 

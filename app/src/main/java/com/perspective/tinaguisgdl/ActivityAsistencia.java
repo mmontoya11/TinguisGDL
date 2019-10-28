@@ -10,11 +10,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.perspective.tinaguisgdl.DB.GestionBD;
 import com.perspective.tinaguisgdl.Model.Tianguis;
 
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +30,7 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
     private ArrayAdapter<String> adapter = null,adapterC = null;
     private SQLiteDatabase db = null;
     private List<String> permisionario = null;
+    private TextView tvTianguis,tvFecha,tvNombre,tvGiro,tvMetros;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +49,8 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
 
         spTianguis = findViewById(R.id.spTianguis);
         spPermisionario = findViewById(R.id.spPermisionario);
+        tvTianguis = findViewById(R.id.tvTianguis);
+        tvFecha = findViewById(R.id.tvFecha);
 
         spTianguis.setOnItemSelectedListener(this);
         spPermisionario.setOnItemSelectedListener(this);

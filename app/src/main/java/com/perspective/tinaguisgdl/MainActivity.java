@@ -85,10 +85,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 eliminaRegistros(GestionBD.TABLE_C_TIANGUIS);
                 c.insetarRegistros("http://192.168.15.7/getCTianguis.php", GestionBD.TABLE_C_TIANGUIS);
             }
-            if(!conn.search("http://192.168.15.7/getCTianguis.php").trim().equals("null")) {
-                eliminaRegistros(GestionBD.TABLE_C_TIANGUIS);
-                c.insetarRegistros("http://192.168.15.7/getCTianguis.php", GestionBD.TABLE_C_TIANGUIS);
-            }
             if(!conn.search("http://192.168.15.7/getCpoblacion.php").trim().equals("null")) {
                 eliminaRegistros(GestionBD.TABLE_C_POBLACION);
                 c.insetarRegistros("http://192.168.15.7/getCpoblacion.php", GestionBD.TABLE_C_POBLACION);

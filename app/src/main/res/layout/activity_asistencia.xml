@@ -112,6 +112,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_height="wrap_content">
                 <TextView
+                    android:id="@+id/tvTianguis"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/black"
@@ -119,6 +120,7 @@
                     android:textStyle="bold"
                     android:text="Tianguis de prueba del "/>
                 <TextView
+                    android:id="@+id/tvFecha"
                     android:textStyle="bold"
                     android:textSize="20sp"
                     android:textColor="@android:color/black"
@@ -129,6 +131,7 @@
 
             </LinearLayout>
             <TextView
+                android:id="@+id/tvComerciante"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="21sp"
@@ -149,6 +152,7 @@
                     android:textSize="17sp"
                     android:layout_height="wrap_content" />
                 <TextView
+                    android:id="@+id/tvPermisionario"
                     android:layout_marginLeft="20dp"
                     android:textSize="21sp"
                     android:textColor="@android:color/black"
@@ -169,6 +173,7 @@
                     android:textStyle="italic"
                     android:layout_height="wrap_content" />
                 <TextView
+                    android:id="@+id/tvGiro"
                     android:layout_marginLeft="46dp"
                     android:textSize="21sp"
                     android:textColor="@android:color/black"
@@ -191,6 +196,7 @@
                     android:layout_height="wrap_content" />
 
                 <TextView
+                    android:id="@+id/tvMetros"
                     android:layout_marginLeft="20dp"
                     android:textSize="21sp"
                     android:textColor="@android:color/black"
@@ -206,7 +212,7 @@
                 android:textColor="@android:color/white"
                 android:text="Imprimir ticket"
                 android:background="@drawable/btn_rounded"/>
-            <Button
+            git s<Button
                 android:id="@+id/btn_administrar"
                 android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
