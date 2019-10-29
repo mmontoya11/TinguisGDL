@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.bixolon.printer.BixolonPrinter;
 import com.perspective.tinaguisgdl.DB.GestionBD;
+import com.perspective.tinaguisgdl.Model.Asistencia;
 import com.perspective.tinaguisgdl.Model.DialogManager;
 import com.perspective.tinaguisgdl.Model.Tianguis;
 import java.util.ArrayList;
@@ -50,10 +51,12 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
     private static String fecha = "",nombre = "",giro = "",puesto = "";
     public static BixolonPrinter mBixolonPrinter;
     private Button btnImprimir;
-    private static int idTianguis = 0,idPuesto = 0,desc1 = 0;
+    private static int idTianguis = 0,idPuesto = 0,desc1 = 0,idPermisio = 0;
     private Bitmap bm;
     private static Bitmap bm1;
-    private static double metros = 0,subtotal = 0d,total = 0d,costo = 0d;
+    private static double metros = 0,subtotal = 0d,total = 0d,costo = 0d,saldo = 0d;
+    private int anno = 0;
+    private Asistencia asistencia = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,6 +151,8 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
 
         costo = gestionBD.getCosto("",db);
 
+        anno = calendar.get(Calendar.YEAR);
+
     }
 
     @Override
@@ -215,10 +220,11 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
 
     public void datosPermisionario(int idTianguis , int idPermisionario) {
 
-        String sql = "SELECT distinct a.id,a.nombres,a.apellidoP,a.apellidoM,b.smmLONGITUD,d.vchGiroComercial,b.id as idP,b.iDescuento FROM " + GestionBD.TABLE_PERMISIONARIO + " a " +
+        String sql = "SELECT distinct a.id,a.nombres,a.apellidoP,a.apellidoM,b.smmLONGITUD,d.vchGiroComercial,b.id as idP,b.iDescuento,e.smlZonaTianguis,e.chZonaTianguis,a.saldo FROM " + GestionBD.TABLE_PERMISIONARIO + " a " +
                 "join " + gestionBD.TABLE_PUESTO + " b on a.id=b.iPERMISIO " +
                 "join " + gestionBD.TABLE_C_TIANGUIS + " c on b.smlTIANGUIS=c.id " +
                 "join " + GestionBD.TABLE_C_GIROS_COMERCIALES + " d on b.smlGIRO1=d.id " +
+                "join " + GestionBD.TABLE_C_ZONA_TIANGUIS + " e on b.iZonaT=e.id " +
                 "where c.id = " + idTianguis + " and a.id = " + idPermisionario;
         Log.v("sql",sql);
         Cursor cursor = this.db.rawQuery(sql,null);
@@ -229,6 +235,8 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
         desc1 = 0;
         metros = 0;
         puesto = "";
+        saldo = 0;
+        idPermisio = 0;
         if(cursor.moveToFirst()){
             do{
                 tvNombre.setText(cursor.getString(cursor.getColumnIndex("nombres")) + " " + cursor.getString(cursor.getColumnIndex("apellidoP")) + " "+ cursor.getString(cursor.getColumnIndex("apellidoM")));
@@ -239,7 +247,9 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
                 metros = cursor.getDouble(cursor.getColumnIndex("smmLONGITUD"));
                 nombre = cursor.getString(cursor.getColumnIndex("nombres")) + " " + cursor.getString(cursor.getColumnIndex("apellidoP")) + " "+ cursor.getString(cursor.getColumnIndex("apellidoM"));
                 giro = cursor.getString(cursor.getColumnIndex("vchGiroComercial"));
-                puesto = cursor.getString(cursor.getColumnIndex("idP"));
+                puesto = "Zona: " + cursor.getString(cursor.getColumnIndex("smlZonaTianguis")) + " Linea: " + cursor.getString(cursor.getColumnIndex("chZonaTianguis"));
+                saldo = cursor.getDouble(cursor.getColumnIndex("saldo"));
+                idPermisio = cursor.getInt(cursor.getColumnIndex("id"));
                 Log.i("desc",desc1 + "");
             }while (cursor.moveToNext());
         }
@@ -260,6 +270,13 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
                 AlertDialog dialog = null;
 
                 showQrCodeDialog(dialog, ActivityAsistencia.this, 0);
+
+                asistencia = new Asistencia(anno,idTianguis,idPermisio,0,idPuesto,fecha);
+
+                if(gestionBD.consultarAsistencia(asistencia,db) > 0)
+                    gestionBD.insertarAsistencia(db,asistencia);
+                else
+                    System.err.print("no inserto, hay un registro");
 
                 break;
             default:
@@ -392,6 +409,33 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
                                     BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
                                     BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
                                     false);
+
+                            if(saldo > 0) {
+                                mBixolonPrinter.printText("Saldo antes de cobro: " + saldo + "\n",
+                                        BixolonPrinter.ALIGNMENT_LEFT,
+                                        BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
+                                        BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
+                                        false);
+
+                                if((saldo - total) > 0) {
+
+                                    saldo -= total;
+
+                                    mBixolonPrinter.printText("Saldo despues de cobro: " + (saldo - total) + "\n",
+                                            BixolonPrinter.ALIGNMENT_LEFT,
+                                            BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
+                                            BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
+                                            false);
+
+                                } else {
+                                    saldo = 0;
+                                    mBixolonPrinter.printText("Saldo despues de cobro: 0 \n",
+                                            BixolonPrinter.ALIGNMENT_LEFT,
+                                            BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
+                                            BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
+                                            false);
+                                }
+                            }
 
                             mBixolonPrinter.printQrCode(data, BixolonPrinter.ALIGNMENT_CENTER, BixolonPrinter.QR_CODE_MODEL2, 8, true);
                             mBixolonPrinter.lineFeed(3, false);
