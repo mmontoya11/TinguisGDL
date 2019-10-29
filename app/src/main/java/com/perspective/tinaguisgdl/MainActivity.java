@@ -95,6 +95,15 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 eliminaRegistros(GestionBD.TABLE_C_ZONA_TIANGUIS);
                 c.insetarRegistros("http://192.168.15.7/CZonaTianguis.php", GestionBD.TABLE_C_ZONA_TIANGUIS);
             }
+            // aqui agrege lo mio
+            if(!conn.search("http://192.168.15.7/getCInspectores.php").trim().equals("null")) {
+                eliminaRegistros(GestionBD.TABLE_C_INSPECTORES);
+                c.insetarRegistros("http://192.168.15.7/getCInspectores.php", GestionBD.TABLE_C_INSPECTORES);
+            }
+            if(!conn.search("http://192.168.15.7/CZonaTianguis.php").trim().equals("null")) {
+                eliminaRegistros(GestionBD.TABLE_C_DEPENDENCIAS);
+                c.insetarRegistros("http://192.168.15.7/CZonaTianguis.php", GestionBD.TABLE_C_DEPENDENCIAS);
+            }
             msj += "Se actualizo COMPLETAMENTE  ";
         } else
             msj += "No se pudo conectar con el servidor";

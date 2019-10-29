@@ -212,7 +212,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
-                android:text="Imprimir ticket"
+                android:text="Tomar asistencia"
                 android:background="@drawable/btn_rounded"/>
             <Button
                 android:id="@+id/btn_rolero"
@@ -220,7 +220,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
-                android:text="ceder a un rolero"
+                android:text="ceder lugar a un rolero"
                 android:background="@drawable/btn_rounded_alt"/>
 
         </LinearLayout>

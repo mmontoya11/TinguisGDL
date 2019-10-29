@@ -14,6 +14,7 @@ import java.util.List;
 
 public class GestionBD extends SQLiteOpenHelper {
 
+
     public static final String TABLE_PERMISIONARIO = "permisionario";
     public static final String TABLE_PUESTO = "puestos";
     public static final String TABLE_CONFIGURACIONES = "configuraciones";
@@ -22,6 +23,9 @@ public class GestionBD extends SQLiteOpenHelper {
     public static final String TABLE_C_TIANGUIS = "c_tianguis";
     public static final String TABLE_C_POBLACION = "c_poblacion";
     public static final String TABLE_C_ZONA_TIANGUIS = "c_zona_tianguis";
+    public static final String TABLE_C_INSPECTORES = "c_inspectores";
+    public static final String TABLE_C_DEPENDENCIAS = "c_dependencias";
+
 
     private String sqlCrearTablaPermisionario = "CREATE TABLE " + TABLE_PERMISIONARIO +"(id integer,poblacion integer,nombres TEXT,domicilio TEXT,apellidoP TEXT,apellidoM TEXT,status TEXT,EstCiv TEXT)";
     private String sqlCrearTablaAdministrador = "CREATE TABLE " + TABLE_C_ADMINISTRADOR +"(id integer,vchMaterno TEXT,tynSexo TEXT,chCurp TEXT,vchPaterno TEXT,vchNombre TEXT,EstCiv TEXT)";
@@ -31,6 +35,9 @@ public class GestionBD extends SQLiteOpenHelper {
     private String sqlCrearTablaPuesto = "CREATE TABLE " + TABLE_PUESTO +"(id integer,iPERMISIO integer,smlTIANGUIS integer,tynDia text,tynSITUACION text)";
     private String sqlCrearTablaConfiguracion = "CREATE TABLE " + TABLE_CONFIGURACIONES +"(id integer,vchPresidente text,vchDirector text,costo_m float,chPeriodo text,vchDependencia text)";
     private String sqlCrearTablaZonaTianguis = "CREATE TABLE " + TABLE_C_ZONA_TIANGUIS +"(id integer,smlZonaTianguis integer,estatus text,smlTianguis integer,CalleCruceIni text,CallePrincipal text,chZonaTianguis text,CalleCruceFin text)";
+    private String sqlCrearTablaInspectores = "CREATE TABLE " + TABLE_C_INSPECTORES +"(id integer)";
+    private String sqlCrearTablaDependencias = "CREATE TABLE " + TABLE_C_DEPENDENCIAS +"(id integer)";
+
 
     public GestionBD(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
@@ -46,6 +53,8 @@ public class GestionBD extends SQLiteOpenHelper {
         db.execSQL(sqlCrearTablaPuesto);
         db.execSQL(sqlCrearTablaConfiguracion);
         db.execSQL(sqlCrearTablaZonaTianguis);
+        db.execSQL(sqlCrearTablaInspectores);
+        db.execSQL(sqlCrearTablaDependencias);
     }
 
     @Override
