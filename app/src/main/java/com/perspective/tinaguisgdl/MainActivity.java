@@ -91,6 +91,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 eliminaRegistros(GestionBD.TABLE_C_POBLACION);
                 c.insetarRegistros("http://192.168.15.7/getCpoblacion.php", GestionBD.TABLE_C_POBLACION);
             }
+            if(!conn.search("http://192.168.15.7/CZonaTianguis.php").trim().equals("null")) {
+                eliminaRegistros(GestionBD.TABLE_C_ZONA_TIANGUIS);
+                c.insetarRegistros("http://192.168.15.7/CZonaTianguis.php", GestionBD.TABLE_C_ZONA_TIANGUIS);
+            }
             msj += "Se actualizo COMPLETAMENTE  ";
         } else
             msj += "No se pudo conectar con el servidor";

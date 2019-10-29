@@ -45,7 +45,7 @@
         android:orientation="horizontal"
         android:layout_height="wrap_content">
         <TextView
-            android:id="@+id/TXprueba"
+            android:id="@+id/tvTianguis"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="21sp"
@@ -53,6 +53,7 @@
             android:textColor="@android:color/black"
             android:text="Baratillo"/>
         <TextView
+            android:id="@+id/tvNombre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="21sp"
@@ -60,6 +61,7 @@
             android:textColor="@android:color/black"
             android:text="Emmanuel Perez"/>
         <TextView
+            android:id="@+id/tvCosto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="21sp"
