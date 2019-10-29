@@ -35,11 +35,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         Button btn_Asistencia = findViewById(R.id.btn_Asistencia);
         CardView Cardview_Faltas = findViewById(R.id.cardview);
         cvActualizar = findViewById(R.id.cvActualizar);
+        CardView cardView_cobro = findViewById(R.id.cardview_cobro);
 
-        Cardview_Faltas.setOnTouchListener(new View.OnTouchListener() {
+        cardView_cobro.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                Toast.makeText(MainActivity.this, "CardView Faltas ", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(MainActivity.this,ActivityCobro.class);
+                startActivity(intent);
                 return true;
             }
         });

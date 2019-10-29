@@ -118,7 +118,7 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
         tia = new ArrayList<>();
         idTia = new ArrayList<>();
 
-        tia.add("Seleccione su comerciante");
+        tia.add("Seleccione su tianguis");
         idTia.add(0);
 
         for (int i = 0;i<tianguis.size();i++){
