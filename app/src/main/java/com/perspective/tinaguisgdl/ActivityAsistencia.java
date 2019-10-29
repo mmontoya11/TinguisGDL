@@ -1,12 +1,17 @@
 package com.perspective.tinaguisgdl;
 
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -19,15 +24,18 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.bixolon.printer.BixolonPrinter;
 import com.perspective.tinaguisgdl.DB.GestionBD;
+import com.perspective.tinaguisgdl.Model.DialogManager;
 import com.perspective.tinaguisgdl.Model.Tianguis;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Set;
 
-public class ActivityAsistencia extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class ActivityAsistencia extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
-    private Spinner spTianguis,spPermisionario;
+    private static Spinner spTianguis,spPermisionario;
     private GestionBD gestionBD = null;
     private List<Tianguis> tianguis = null;
     private List<String> tia = null;
@@ -37,8 +45,15 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
     private List<String> permisionario = null;
     private TextView tvTianguis,tvFecha,tvNombre,tvGiro,tvMetros;
     private List<Integer> idPermisionario;
-    private Calendar calendar = null;
-    private String fecha = "";
+    private static Calendar calendar = null;
+    private String mConnectedDeviceName = "";
+    private static String fecha = "",nombre = "",giro = "",puesto = "";
+    public static BixolonPrinter mBixolonPrinter;
+    private Button btnImprimir;
+    private static int idTianguis = 0,idPuesto = 0,desc1 = 0;
+    private Bitmap bm;
+    private static Bitmap bm1;
+    private static double metros = 0,subtotal = 0d,total = 0d,costo = 0d;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +87,7 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
         tvNombre = findViewById(R.id.tvPermisionario);
         tvGiro = findViewById(R.id.tvGiro);
         tvMetros = findViewById(R.id.tvMetros);
+        btnImprimir = findViewById(R.id.btnImprimir);
 
         tvTianguis.setText("");
         tvFecha.setText("");
@@ -82,6 +98,7 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
 
         spTianguis.setOnItemSelectedListener(this);
         spPermisionario.setOnItemSelectedListener(this);
+        btnImprimir.setOnClickListener(this);
 
         gestionBD = new GestionBD(getApplicationContext(),"TianguisGDL",null,MainActivity.VERSION);
         db = gestionBD.getReadableDatabase();
@@ -95,10 +112,11 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
                 Log.i("columnas",cursor.getColumnName(i));
             }
         }
+        cursor.close();
 
         tianguis = gestionBD.getAllTianguis("",db);
-        tia = new ArrayList<String>();
-        idTia = new ArrayList<Integer>();
+        tia = new ArrayList<>();
+        idTia = new ArrayList<>();
 
         tia.add("Seleccione su comerciante");
         idTia.add(0);
@@ -109,10 +127,10 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
             idTia.add(tianguis.get(i).getId());
         }
 
-        permisionario = new ArrayList<String>();
-        adapter = new ArrayAdapter<String>(getApplicationContext(),R.layout.spinner_color_layout,tia);
-        adapterC = new ArrayAdapter<String>(getApplicationContext(),R.layout.spinner_dropdown_layout,permisionario);
-        idPermisionario = new ArrayList<Integer>();
+        permisionario = new ArrayList<>();
+        adapter = new ArrayAdapter<>(getApplicationContext(),R.layout.spinner_color_layout,tia);
+        adapterC = new ArrayAdapter<>(getApplicationContext(),R.layout.spinner_dropdown_layout,permisionario);
+        idPermisionario = new ArrayList<>();
 
 
 
@@ -124,6 +142,12 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
 
         tvFecha.setText(fecha);
 
+        bm = BitmapFactory.decodeResource(getResources(), R.drawable.admin);
+
+        bm1 = bm;
+
+        costo = gestionBD.getCosto("",db);
+
     }
 
     @Override
@@ -133,12 +157,12 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
                 if(position > 0) {
                     consultarComerciante(idTia.get(position));
                     tvTianguis.setText("Tianguis " + spTianguis.getSelectedItem().toString() + " del ");
+                    idTianguis = idTia.get(position);
                 }
                 break;
 
             case R.id.spPermisionario:
                 if(position > 0) {
-                    Log.v("spPermisionario",position + "");
                     datosPermisionario(idTia.get(spTianguis.getSelectedItemPosition()),idPermisionario.get(position));
                 }
                 break;
@@ -191,25 +215,198 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
 
     public void datosPermisionario(int idTianguis , int idPermisionario) {
 
-        String sql = "SELECT distinct a.id,a.nombres,a.apellidoP,a.apellidoM,b.smmLONGITUD,d.vchGiroComercial FROM " + GestionBD.TABLE_PERMISIONARIO + " a " +
+        String sql = "SELECT distinct a.id,a.nombres,a.apellidoP,a.apellidoM,b.smmLONGITUD,d.vchGiroComercial,b.id as idP,b.iDescuento FROM " + GestionBD.TABLE_PERMISIONARIO + " a " +
                 "join " + gestionBD.TABLE_PUESTO + " b on a.id=b.iPERMISIO " +
                 "join " + gestionBD.TABLE_C_TIANGUIS + " c on b.smlTIANGUIS=c.id " +
                 "join " + GestionBD.TABLE_C_GIROS_COMERCIALES + " d on b.smlGIRO1=d.id " +
                 "where c.id = " + idTianguis + " and a.id = " + idPermisionario;
         Log.v("sql",sql);
         Cursor cursor = this.db.rawQuery(sql,null);
-        Log.v("total",cursor.getCount() + " total");
         tvNombre.setText("");
         tvGiro.setText("");
         tvMetros.setText("");
+        idPuesto = 0;
+        desc1 = 0;
+        metros = 0;
+        puesto = "";
         if(cursor.moveToFirst()){
             do{
-                Log.v("datos",cursor.getString(cursor.getColumnIndex("id")));
                 tvNombre.setText(cursor.getString(cursor.getColumnIndex("nombres")) + " " + cursor.getString(cursor.getColumnIndex("apellidoP")) + " "+ cursor.getString(cursor.getColumnIndex("apellidoM")));
                 tvGiro.setText(cursor.getString(cursor.getColumnIndex("vchGiroComercial")));
                 tvMetros.setText("" + cursor.getDouble(cursor.getColumnIndex("smmLONGITUD")));
+                idPuesto = cursor.getInt(cursor.getColumnIndex("idP"));
+                desc1 = cursor.getInt(cursor.getColumnIndex("iDescuento"));
+                metros = cursor.getDouble(cursor.getColumnIndex("smmLONGITUD"));
+                nombre = cursor.getString(cursor.getColumnIndex("nombres")) + " " + cursor.getString(cursor.getColumnIndex("apellidoP")) + " "+ cursor.getString(cursor.getColumnIndex("apellidoM"));
+                giro = cursor.getString(cursor.getColumnIndex("vchGiroComercial"));
+                puesto = cursor.getString(cursor.getColumnIndex("idP"));
+                Log.i("desc",desc1 + "");
             }while (cursor.moveToNext());
         }
+        cursor.close();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btnImprimir:
+
+                subtotal = Double.parseDouble(tvMetros.getText().toString())*costo;
+                total = subtotal;
+
+                mBixolonPrinter = new BixolonPrinter(this, mHandler, null);
+                mBixolonPrinter.findBluetoothPrinters();
+
+                AlertDialog dialog = null;
+
+                showQrCodeDialog(dialog, ActivityAsistencia.this, 0);
+
+                break;
+            default:
+
+                    break;
+        }
+    }
+
+    public final Handler mHandler = new Handler(new Handler.Callback() {
+
+        @Override
+        public boolean handleMessage(Message msg) {
+
+            switch (msg.what) {
+
+                case BixolonPrinter.MESSAGE_DEVICE_NAME:
+                    mConnectedDeviceName = msg.getData().getString(BixolonPrinter.KEY_STRING_DEVICE_NAME);
+                    Toast.makeText(getApplicationContext(), mConnectedDeviceName, Toast.LENGTH_LONG).show();
+                    return true;
+
+                case BixolonPrinter.MESSAGE_BLUETOOTH_DEVICE_SET:
+                    if (msg.obj == null) {
+                        Toast.makeText(getApplicationContext(), "No paired device", Toast.LENGTH_SHORT).show();
+                    } else {
+                        DialogManager.showBluetoothDialog(ActivityAsistencia.this, (Set<BluetoothDevice>) msg.obj);
+                    }
+                    return true;
+
+                case BixolonPrinter.MESSAGE_STATE_CHANGE:
+
+                    if(msg.arg1 == BixolonPrinter.STATE_CONNECTED) {
+
+                    }
+                    break;
+                case BixolonPrinter.STATE_NONE:
+                    break;
+                case BixolonPrinter.MESSAGE_PRINT_COMPLETE:
+                    //mBixolonPrinter.disconnect();
+                    //mHandler.sendEmptyMessage(0);
+                    break;
+            }
+
+
+            return true;
+        }
+    });
+
+     static void showQrCodeDialog(AlertDialog dialog, final Context context,final int desc) {
+        calendar = Calendar.getInstance();
+        if (dialog == null) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            final View layout = inflater.inflate(R.layout.dialog_print_qrcode, null);
+
+            dialog = new AlertDialog.Builder(context).setView(layout).setTitle("QR Code")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int which) {
+                            String data = metros+"|"+fecha + "|"+idTianguis + "|" + idPuesto + "|"  + nombre + "|";
+
+
+                            mBixolonPrinter.setSingleByteFont(BixolonPrinter.CODE_PAGE_1252_LATIN1);
+
+                            mBixolonPrinter.setPrintDirection(BixolonPrinter.DIRECTION_0_DEGREE_ROTATION);
+                            mBixolonPrinter.setAbsoluteVerticalPrintPosition(200);
+                            mBixolonPrinter.setAbsolutePrintPosition(120);
+                            mBixolonPrinter.printBitmap(bm1, BixolonPrinter.ALIGNMENT_CENTER, 200, 65, false);
+
+                            mBixolonPrinter.printText("Municipio de Guadalajara\n",
+                                    BixolonPrinter.ALIGNMENT_LEFT,
+                                    BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
+                                    BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
+                                    false);
+
+                            mBixolonPrinter.printText("Fecha: " + fecha + " " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) +  "\n",
+                                    BixolonPrinter.ALIGNMENT_LEFT,
+                                    BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
+                                    BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
+                                    false);
+
+                            mBixolonPrinter.printText("Tianguis: " + spTianguis.getSelectedItem().toString() + "\n",
+                                    BixolonPrinter.ALIGNMENT_LEFT,
+                                    BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
+                                    BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
+                                    false);
+
+                            mBixolonPrinter.printText("Comerciante: " + nombre + "\n",
+                                    BixolonPrinter.ALIGNMENT_LEFT,
+                                    BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
+                                    BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
+                                    false);
+
+                            mBixolonPrinter.printText("Giro: " + giro + "\n",
+                                    BixolonPrinter.ALIGNMENT_LEFT,
+                                    BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
+                                    BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
+                                    false);
+
+                            mBixolonPrinter.printText("Puesto: " + puesto + "\n",
+                                    BixolonPrinter.ALIGNMENT_LEFT,
+                                    BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
+                                    BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
+                                    false);
+
+                            mBixolonPrinter.printText("Metros: " + metros + "\n",
+                                    BixolonPrinter.ALIGNMENT_LEFT,
+                                    BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
+                                    BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
+                                    false);
+
+                            mBixolonPrinter.printText("Costo metro lineal: " + costo + "\n",
+                                    BixolonPrinter.ALIGNMENT_LEFT,
+                                    BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
+                                    BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
+                                    false);
+
+                            mBixolonPrinter.printText("Subtotal: " + subtotal + "\n",
+                                    BixolonPrinter.ALIGNMENT_LEFT,
+                                    BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
+                                    BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
+                                    false);
+
+                            mBixolonPrinter.printText("Descuento: " + desc1 + "\n",
+                                    BixolonPrinter.ALIGNMENT_LEFT,
+                                    BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
+                                    BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
+                                    false);
+
+                            mBixolonPrinter.printText("Total: " + total + "\n",
+                                    BixolonPrinter.ALIGNMENT_LEFT,
+                                    BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
+                                    BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
+                                    false);
+
+                            mBixolonPrinter.printQrCode(data, BixolonPrinter.ALIGNMENT_CENTER, BixolonPrinter.QR_CODE_MODEL2, 8, true);
+                            mBixolonPrinter.lineFeed(3, false);
+
+
+                            mBixolonPrinter.disconnect();
+                        }
+                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }).create();
+        }
+        dialog.show();
     }
 
 }

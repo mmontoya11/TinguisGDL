@@ -21,6 +21,7 @@ public class GestionBD extends SQLiteOpenHelper {
     public static final String TABLE_C_GIROS_COMERCIALES = "c_giros_comerciales";
     public static final String TABLE_C_TIANGUIS = "c_tianguis";
     public static final String TABLE_C_POBLACION = "c_poblacion";
+    public static final String TABLE_C_ZONA_TIANGUIS = "c_zona_tianguis";
 
     private String sqlCrearTablaPermisionario = "CREATE TABLE " + TABLE_PERMISIONARIO +"(id integer,poblacion integer,nombres TEXT,domicilio TEXT,apellidoP TEXT,apellidoM TEXT,status TEXT,EstCiv TEXT)";
     private String sqlCrearTablaAdministrador = "CREATE TABLE " + TABLE_C_ADMINISTRADOR +"(id integer,vchMaterno TEXT,tynSexo TEXT,chCurp TEXT,vchPaterno TEXT,vchNombre TEXT,EstCiv TEXT)";
@@ -29,6 +30,7 @@ public class GestionBD extends SQLiteOpenHelper {
     private String sqlCrearTablaCPoblacion = "CREATE TABLE " + TABLE_C_POBLACION +"(id integer,c_poblaciones TEXT)";
     private String sqlCrearTablaPuesto = "CREATE TABLE " + TABLE_PUESTO +"(id integer,iPERMISIO integer,smlTIANGUIS integer,tynDia text,tynSITUACION text)";
     private String sqlCrearTablaConfiguracion = "CREATE TABLE " + TABLE_CONFIGURACIONES +"(id integer,vchPresidente text,vchDirector text,costo_m float,chPeriodo text,vchDependencia text)";
+    private String sqlCrearTablaZonaTianguis = "CREATE TABLE " + TABLE_C_ZONA_TIANGUIS +"(id integer,smlZonaTianguis integer,estatus text,smlTianguis integer,CalleCruceIni text,CallePrincipal text,chZonaTianguis text,CalleCruceFin text)";
 
     public GestionBD(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
@@ -43,6 +45,7 @@ public class GestionBD extends SQLiteOpenHelper {
         db.execSQL(sqlCrearTablaCPoblacion);
         db.execSQL(sqlCrearTablaPuesto);
         db.execSQL(sqlCrearTablaConfiguracion);
+        db.execSQL(sqlCrearTablaZonaTianguis);
     }
 
     @Override
@@ -69,5 +72,20 @@ public class GestionBD extends SQLiteOpenHelper {
 
     public Tianguis cursorToTianguis(Cursor cursor) {
         return new Tianguis(cursor.getInt(cursor.getColumnIndex("id")),cursor.getString(cursor.getColumnIndex("nombre")),cursor.getString(cursor.getColumnIndex("estatus")),cursor.getInt(cursor.getColumnIndex("lunes")),cursor.getInt(cursor.getColumnIndex("martes")),cursor.getInt(cursor.getColumnIndex("miercoles")),cursor.getInt(cursor.getColumnIndex("jueves")),cursor.getInt(cursor.getColumnIndex("viernes")),cursor.getInt(cursor.getColumnIndex("sabado")),cursor.getInt(cursor.getColumnIndex("domingo")));
+    }
+
+    public double getCosto(String condition, SQLiteDatabase db) {
+        if(TextUtils.isEmpty(condition))
+            condition = "1=1";
+        double costo = 0;
+        String sql = "select costo_m from " + GestionBD.TABLE_CONFIGURACIONES + " where " + condition;
+        Log.v("sql",sql);
+        Cursor cursor = db.rawQuery(sql,null);
+        if(cursor.moveToFirst()) {
+            do {
+                costo = cursor.getDouble(cursor.getColumnIndex("costo_m"));
+            } while (cursor.moveToNext());
+        }
+        return costo;
     }
 }
