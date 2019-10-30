@@ -3,7 +3,7 @@ package com.perspective.tinaguisgdl.Model;
 public class Asistencia {
 
     private int id,anno,idTianguis,idPermisionario,estado,puesto;
-    private String semanas;
+    private String semanas,estatus;
 
     public Asistencia() {
         this.id = 0;
@@ -13,9 +13,10 @@ public class Asistencia {
         this.estado = 0;
         this.puesto = 0;
         this.semanas = "";
+        this.estatus = "";
     }
 
-    public Asistencia(int id, int anno, int idTianguis, int idPermisionario, int estado, int puesto, String semanas) {
+    public Asistencia(int id, int anno, int idTianguis, int idPermisionario, int estado, int puesto, String semanas,String estatus) {
         this.id = id;
         this.anno = anno;
         this.idTianguis = idTianguis;
@@ -23,15 +24,17 @@ public class Asistencia {
         this.estado = estado;
         this.puesto = puesto;
         this.semanas = semanas;
+        this.estatus = estatus;
     }
 
-    public Asistencia(int anno, int idTianguis, int idPermisionario, int estado, int puesto, String semanas) {
+    public Asistencia(int anno, int idTianguis, int idPermisionario, int estado, int puesto, String semanas,String estatus) {
         this.anno = anno;
         this.idTianguis = idTianguis;
         this.idPermisionario = idPermisionario;
         this.estado = estado;
         this.puesto = puesto;
         this.semanas = semanas;
+        this.estatus = estatus;
     }
 
     public int getId() {
@@ -88,5 +91,13 @@ public class Asistencia {
 
     public void setSemanas(String semanas) {
         this.semanas = semanas;
+    }
+
+    public String getEstatus() {
+        return estatus;
+    }
+
+    public void setEstatus(String estatus) {
+        this.estatus = estatus;
     }
 }

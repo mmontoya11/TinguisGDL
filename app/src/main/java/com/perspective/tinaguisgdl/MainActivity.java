@@ -1,5 +1,6 @@
 package com.perspective.tinaguisgdl;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
@@ -7,8 +8,6 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -18,6 +17,15 @@ import android.widget.Toast;
 
 import com.perspective.tinaguisgdl.DB.Conexion;
 import com.perspective.tinaguisgdl.DB.GestionBD;
+import com.perspective.tinaguisgdl.DB.JSONParser;
+import com.perspective.tinaguisgdl.Model.Asistencia;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener {
 
@@ -25,7 +33,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private Conexion c;
     public static final int VERSION  = 1;
     private String msj = "";
-    private CardView cvActualizar;
+    private CardView cvActualizar,cvCarga;
+    private GestionBD gestion = null;
+    private SQLiteDatabase db = null;
+    private JSONParser jparser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         Button btn_Asistencia = findViewById(R.id.btn_Asistencia);
         CardView Cardview_Faltas = findViewById(R.id.cardview);
         cvActualizar = findViewById(R.id.cvActualizar);
+        cvCarga = findViewById(R.id.cardview_carga);
         CardView cardView_cobro = findViewById(R.id.cardview_cobro);
 
         cardView_cobro.setOnTouchListener(new View.OnTouchListener() {
@@ -47,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         });
 
         cvActualizar.setOnTouchListener(this);
+        cvCarga.setOnTouchListener(this);
 
         c = new Conexion(getApplicationContext());
 
@@ -57,6 +70,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 startActivity(intent);
             }
         });
+
+        gestion = new GestionBD(getApplicationContext(),"TianguisGDL",null,VERSION);
+        db = gestion.getReadableDatabase();
+        jparser = new JSONParser();
 
     }
 
@@ -135,6 +152,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             case R.id.cvActualizar:
                 new ActualizarBD().execute("hola");
                 break;
+            case R.id.cardview_carga:
+                Log.v("envias","datos");
+                new EnviasDatos().execute();
+                break;
         }
         return false;
     }
@@ -159,6 +180,57 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             Toast toast = Toast.makeText(getApplicationContext(),msj,Toast.LENGTH_SHORT);
             toast.setGravity(0,0,15);
             toast.show();
+        }
+    }
+
+    public class EnviasDatos extends AsyncTask<String,Void,Boolean> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Boolean doInBackground(String... strings) {
+            mandarAsistencia();
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+        }
+    }
+
+    public void mandarAsistencia() {
+        String sql = "SELECT * FROM " + GestionBD.TABLE_ASISTENCIA + " where estatus = 'N'";
+        Cursor cursor = db.rawQuery(sql,null);
+        Log.v("total" , cursor.getCount() + " count");
+        if(cursor.moveToFirst()) {
+            do {
+                ArrayList<NameValuePair> asistencia = new ArrayList<>();
+                asistencia.add(new BasicNameValuePair("smlAnno",cursor.getInt(cursor.getColumnIndex("smlAnno")) + " "));
+                asistencia.add(new BasicNameValuePair("vchSemanas",cursor.getString(cursor.getColumnIndex("vchSemanas"))));
+                asistencia.add(new BasicNameValuePair("smlTianguis",cursor.getInt(cursor.getColumnIndex("smlTianguis")) + " "));
+                asistencia.add(new BasicNameValuePair("iPermisionar",cursor.getInt(cursor.getColumnIndex("iPermisionar")) + " "));
+                asistencia.add(new BasicNameValuePair("tynEstado",cursor.getInt(cursor.getColumnIndex("tynEstado")) + " "));
+                asistencia.add(new BasicNameValuePair("puesto",cursor.getInt(cursor.getColumnIndex("puesto")) + " "));
+
+                JSONObject jo;
+
+                jo = jparser.realizarHttpRequest("http://192.168.15.7/insertAsistencias.php", "GET", asistencia);
+
+                try {
+                    if(jo.getInt("estatus") == 1) {
+                        ContentValues cv = new ContentValues();
+                        cv.put("estatus", "S");
+                        Log.v("update",db.update(GestionBD.TABLE_ASISTENCIA, cv, "id = " + cursor.getInt(0), null) + " update");
+                    }
+                }catch(JSONException e) {
+                    System.err.println(e.getMessage());
+                }
+
+            } while(cursor.moveToNext());
         }
     }
 

@@ -1,6 +1,7 @@
 package com.perspective.tinaguisgdl;
 
 import android.bluetooth.BluetoothDevice;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
@@ -271,12 +272,25 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
 
                 showQrCodeDialog(dialog, ActivityAsistencia.this, 0);
 
-                asistencia = new Asistencia(anno,idTianguis,idPermisio,0,idPuesto,fecha);
+                asistencia = new Asistencia(anno,idTianguis,idPermisio,0,idPuesto,fecha,"N");
 
-                if(gestionBD.consultarAsistencia(asistencia,db) > 0)
-                    gestionBD.insertarAsistencia(db,asistencia);
-                else
+                if(gestionBD.consultarAsistencia(asistencia,db) == 0) {
+                    Log.v("entro","if");
+                    if(saldo > 0) {
+                        if((saldo - total) > 0)
+                            saldo -= total;
+                         else
+                            saldo = 0;
+                    }
+                    ContentValues cv = new ContentValues();
+                    cv.put("saldo",saldo);
+                    System.err.print(db.update(gestionBD.TABLE_PERMISIONARIO,cv,"id = " + idPermisio,null) + " update");
+                    gestionBD.insertarAsistencia(db, asistencia);
+                }
+                else {
+                    Log.v("entro","no inserto, hay un registro");
                     System.err.print("no inserto, hay un registro");
+                }
 
                 break;
             default:

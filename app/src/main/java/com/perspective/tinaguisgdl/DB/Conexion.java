@@ -9,6 +9,7 @@ import android.net.ConnectivityManager;
 import android.util.Log;
 
 import com.perspective.tinaguisgdl.MainActivity;
+import com.perspective.tinaguisgdl.Model.Asistencia;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
