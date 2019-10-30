@@ -40,7 +40,7 @@ public class GestionBD extends SQLiteOpenHelper {
     private String sqlCrearTablaZonaTianguis = "CREATE TABLE " + TABLE_C_ZONA_TIANGUIS +"(id integer,smlZonaTianguis integer,estatus text,smlTianguis integer,CalleCruceIni text,CallePrincipal text,chZonaTianguis text,CalleCruceFin text)";
     private String sqlCrearTablaInspectores = "CREATE TABLE " + TABLE_C_INSPECTORES +"(id integer)";
     private String sqlCrearTablaDependencias = "CREATE TABLE " + TABLE_C_DEPENDENCIAS +"(id integer)";
-    private String sqlCrearTablaAsistencia = "CREATE TABLE " + TABLE_ASISTENCIA + "(id integer,smlAnno integer,vchSemanas text,smlTianguis integer,iPermisionar integer,tynEstado integer,puesto integer,estatus TEXT)";
+    private String sqlCrearTablaAsistencia = "CREATE TABLE " + TABLE_ASISTENCIA + "(id integer PRIMARY KEY AUTOINCREMENT,smlAnno integer,vchSemanas text,smlTianguis integer,iPermisionar integer,tynEstado integer,puesto integer,estatus TEXT)";
 
 
     public GestionBD(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {

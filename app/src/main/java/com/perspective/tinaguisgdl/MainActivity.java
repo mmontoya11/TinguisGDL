@@ -221,6 +221,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 jo = jparser.realizarHttpRequest("http://192.168.15.7/insertAsistencias.php", "GET", asistencia);
 
                 try {
+                    Log.v("dato1",cursor.getInt(cursor.getColumnIndex("id")) + cursor.getColumnName(0));
                     if(jo.getInt("estatus") == 1) {
                         ContentValues cv = new ContentValues();
                         cv.put("estatus", "S");
