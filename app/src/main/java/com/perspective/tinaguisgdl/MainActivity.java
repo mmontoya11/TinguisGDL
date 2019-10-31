@@ -3,7 +3,10 @@ package com.perspective.tinaguisgdl;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
@@ -11,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -100,9 +104,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 eliminaRegistros(GestionBD.TABLE_C_INSPECTORES);
                 c.insetarRegistros("http://192.168.15.7/getCInspectores.php", GestionBD.TABLE_C_INSPECTORES);
             }
-            if(!conn.search("http://192.168.15.7/CZonaTianguis.php").trim().equals("null")) {
+            if(!conn.search("http://192.168.15.7/getCDependencias.php").trim().equals("null")) {
                 eliminaRegistros(GestionBD.TABLE_C_DEPENDENCIAS);
-                c.insetarRegistros("http://192.168.15.7/CZonaTianguis.php", GestionBD.TABLE_C_DEPENDENCIAS);
+                c.insetarRegistros("http://192.168.15.7/getCDependencias.php", GestionBD.TABLE_C_DEPENDENCIAS);
             }
             msj += "Se actualizo COMPLETAMENTE  ";
         } else
@@ -141,9 +145,12 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     public class ActualizarBD extends AsyncTask<String,Void,String> {
 
+        AlertDialog dialog = showDialogDonwLoad();
+
         @Override
         protected void onPreExecute() {
 
+            dialog.show();
         }
 
         @Override
@@ -155,11 +162,24 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         @Override
         protected void onPostExecute(String result) {
+            dialog.dismiss();
             Log.v("termino",result);
             Toast toast = Toast.makeText(getApplicationContext(),msj,Toast.LENGTH_SHORT);
             toast.setGravity(0,0,15);
             toast.show();
+
         }
     }
+
+    public AlertDialog showDialogDonwLoad(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.dialog_download, null);
+        AlertDialog dialog = builder.create();
+        builder.setView(view);
+        //dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        return dialog;
+    }
+
 
 }
