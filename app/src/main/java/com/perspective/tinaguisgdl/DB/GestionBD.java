@@ -30,7 +30,7 @@ public class GestionBD extends SQLiteOpenHelper {
     public static final String TABLE_ASISTENCIA = "asistemcias";
     private ContentValues cv = null;
 
-    private String sqlCrearTablaPermisionario = "CREATE TABLE " + TABLE_PERMISIONARIO +"(id integer,poblacion integer,nombres TEXT,domicilio TEXT,apellidoP TEXT,apellidoM TEXT,status TEXT,EstCiv TEXT)";
+    private String sqlCrearTablaPermisionario = "CREATE TABLE " + TABLE_PERMISIONARIO +"(id integer,poblacion integer,nombres TEXT,domicilio TEXT,apellidoP TEXT,apellidoM TEXT,status TEXT,EstCiv TEXT,estatus TEXT)";
     private String sqlCrearTablaAdministrador = "CREATE TABLE " + TABLE_C_ADMINISTRADOR +"(id integer,vchMaterno TEXT,tynSexo TEXT,chCurp TEXT,vchPaterno TEXT,vchNombre TEXT,EstCiv TEXT)";
     private String sqlCrearGiros  = "CREATE TABLE " + TABLE_C_GIROS_COMERCIALES +"(id integer,smlFamilia INTEGER,tynEstatus TEXT,vchGiroComercial TEXT)";
     private String sqlCrearTablaCTianguis = "CREATE TABLE " + TABLE_C_TIANGUIS +"(id integer,categoria TEXT,estatus TEXT,colonia TEXT,dia TEXT,nombre TEXT,calle_ubicacion TEXT,lunes TEXT,martes TEXT, miercoles Text,jueves text,viernes text,sabado text,domingo text)";

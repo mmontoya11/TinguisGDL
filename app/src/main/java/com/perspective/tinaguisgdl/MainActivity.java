@@ -79,47 +79,47 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     public void insertar() {
         msj = "";
-        if (!conn.search("http://192.168.15.7/getPermisionario.php").trim().equals("null")) {
-            if(!conn.search("http://192.168.15.7/getPermisionario.php").trim().equals("null")) {
+        if (!conn.search("http://192.168.43.73/getPermisionario.php").trim().equals("null")) {
+            if(!conn.search("http://192.168.43.73/getPermisionario.php").trim().equals("null")) {
                 eliminaRegistros(GestionBD.TABLE_PERMISIONARIO);
-                c.insetarRegistros("http://192.168.15.7/getPermisionario.php", GestionBD.TABLE_PERMISIONARIO);
+                c.insetarRegistros("http://192.168.43.73/getPermisionario.php", GestionBD.TABLE_PERMISIONARIO);
             }
-            if(!conn.search("http://192.168.15.7/getPuestos.php").trim().equals("null")) {
+            if(!conn.search("http://192.168.43.73/getPuestos.php").trim().equals("null")) {
                 eliminaRegistros(GestionBD.TABLE_PUESTO);
-                c.insetarRegistros("http://192.168.15.7/getPuestos.php", GestionBD.TABLE_PUESTO);
+                c.insetarRegistros("http://192.168.43.73/getPuestos.php", GestionBD.TABLE_PUESTO);
             }
-            if(!conn.search("http://192.168.15.7/getConfiguraciones.php").trim().equals("null")) {
+            if(!conn.search("http://192.168.43.73/getConfiguraciones.php").trim().equals("null")) {
                 eliminaRegistros(GestionBD.TABLE_CONFIGURACIONES);
-                c.insetarRegistros("http://192.168.15.7/getConfiguraciones.php", GestionBD.TABLE_CONFIGURACIONES);
+                c.insetarRegistros("http://192.168.43.73/getConfiguraciones.php", GestionBD.TABLE_CONFIGURACIONES);
             }
-            if(!conn.search("http://192.168.15.7/getCAdministrador.php").trim().equals("null")) {
+            if(!conn.search("http://192.168.43.73/getCAdministrador.php").trim().equals("null")) {
                 eliminaRegistros(GestionBD.TABLE_C_ADMINISTRADOR);
-                c.insetarRegistros("http://192.168.15.7/getCAdministrador.php", GestionBD.TABLE_C_ADMINISTRADOR);
+                c.insetarRegistros("http://192.168.43.73/getCAdministrador.php", GestionBD.TABLE_C_ADMINISTRADOR);
             }
-            if(!conn.search("http://192.168.15.7/getCGirosComerciales.php").trim().equals("null")) {
+            if(!conn.search("http://192.168.43.73/getCGirosComerciales.php").trim().equals("null")) {
                 eliminaRegistros(GestionBD.TABLE_C_GIROS_COMERCIALES);
-                c.insetarRegistros("http://192.168.15.7/getCGirosComerciales.php", GestionBD.TABLE_C_GIROS_COMERCIALES);
+                c.insetarRegistros("http://192.168.43.73/getCGirosComerciales.php", GestionBD.TABLE_C_GIROS_COMERCIALES);
             }
-            if(!conn.search("http://192.168.15.7/getCTianguis.php").trim().equals("null")) {
+            if(!conn.search("http://192.168.43.73/getCTianguis.php").trim().equals("null")) {
                 eliminaRegistros(GestionBD.TABLE_C_TIANGUIS);
-                c.insetarRegistros("http://192.168.15.7/getCTianguis.php", GestionBD.TABLE_C_TIANGUIS);
+                c.insetarRegistros("http://192.168.43.73/getCTianguis.php", GestionBD.TABLE_C_TIANGUIS);
             }
-            if(!conn.search("http://192.168.15.7/getCpoblacion.php").trim().equals("null")) {
+            if(!conn.search("http://192.168.43.73/getCpoblacion.php").trim().equals("null")) {
                 eliminaRegistros(GestionBD.TABLE_C_POBLACION);
-                c.insetarRegistros("http://192.168.15.7/getCpoblacion.php", GestionBD.TABLE_C_POBLACION);
+                c.insetarRegistros("http://192.168.43.73/getCpoblacion.php", GestionBD.TABLE_C_POBLACION);
             }
-            if(!conn.search("http://192.168.15.7/CZonaTianguis.php").trim().equals("null")) {
+            if(!conn.search("http://192.168.43.73/CZonaTianguis.php").trim().equals("null")) {
                 eliminaRegistros(GestionBD.TABLE_C_ZONA_TIANGUIS);
-                c.insetarRegistros("http://192.168.15.7/CZonaTianguis.php", GestionBD.TABLE_C_ZONA_TIANGUIS);
+                c.insetarRegistros("http://192.168.43.73/CZonaTianguis.php", GestionBD.TABLE_C_ZONA_TIANGUIS);
             }
             // aqui agrege lo mio
-            if(!conn.search("http://192.168.15.7/getCInspectores.php").trim().equals("null")) {
+            if(!conn.search("http://192.168.43.73/getCInspectores.php").trim().equals("null")) {
                 eliminaRegistros(GestionBD.TABLE_C_INSPECTORES);
-                c.insetarRegistros("http://192.168.15.7/getCInspectores.php", GestionBD.TABLE_C_INSPECTORES);
+                c.insetarRegistros("http://192.168.43.73/getCInspectores.php", GestionBD.TABLE_C_INSPECTORES);
             }
-            if(!conn.search("http://192.168.15.7/CZonaTianguis.php").trim().equals("null")) {
+            if(!conn.search("http://192.168.43.73/CZonaTianguis.php").trim().equals("null")) {
                 eliminaRegistros(GestionBD.TABLE_C_DEPENDENCIAS);
-                c.insetarRegistros("http://192.168.15.7/CZonaTianguis.php", GestionBD.TABLE_C_DEPENDENCIAS);
+                c.insetarRegistros("http://192.168.43.73/CZonaTianguis.php", GestionBD.TABLE_C_DEPENDENCIAS);
             }
             msj += "Se actualizo COMPLETAMENTE  ";
         } else
@@ -193,6 +193,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         @Override
         protected Boolean doInBackground(String... strings) {
             mandarAsistencia();
+            actualizarSaldos();
             return true;
         }
 
@@ -218,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
                 JSONObject jo;
 
-                jo = jparser.realizarHttpRequest("http://192.168.15.7/insertAsistencias.php", "GET", asistencia);
+                jo = jparser.realizarHttpRequest("http://192.168.43.73/insertAsistencias.php", "GET", asistencia);
 
                 try {
                     Log.v("dato1",cursor.getInt(cursor.getColumnIndex("id")) + cursor.getColumnName(0));
@@ -226,6 +227,35 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                         ContentValues cv = new ContentValues();
                         cv.put("estatus", "S");
                         Log.v("update",db.update(GestionBD.TABLE_ASISTENCIA, cv, "id = " + cursor.getInt(0), null) + " update");
+                    }
+                }catch(JSONException e) {
+                    System.err.println(e.getMessage());
+                }
+
+            } while(cursor.moveToNext());
+        }
+    }
+
+    public void actualizarSaldos() {
+        String sql = "SELECT * FROM " + GestionBD.TABLE_PERMISIONARIO + " where estatus = 'N'";
+        Cursor cursor = db.rawQuery(sql,null);
+        Log.v("total saldo" , cursor.getCount() + " count");
+        if(cursor.moveToFirst()) {
+            do {
+                ArrayList<NameValuePair> asistencia = new ArrayList<>();
+                asistencia.add(new BasicNameValuePair("saldo",cursor.getDouble(cursor.getColumnIndex("saldo")) + ""));
+                asistencia.add(new BasicNameValuePair("id",cursor.getInt(cursor.getColumnIndex("id")) + ""));
+
+                JSONObject jo;
+
+                jo = jparser.realizarHttpRequest("http://192.168.43.73/updateSaldo.php", "GET", asistencia);
+
+                try {
+                    Log.v("dato saldo",cursor.getInt(cursor.getColumnIndex("id")) + " " + cursor.getColumnName(0));
+                    if(jo.getInt("estatus") == 1) {
+                        ContentValues cv = new ContentValues();
+                        cv.put("estatus", "S");
+                        Log.v("update",db.update(GestionBD.TABLE_PERMISIONARIO, cv, "id = " + cursor.getInt(0), null) + " update");
                     }
                 }catch(JSONException e) {
                     System.err.println(e.getMessage());

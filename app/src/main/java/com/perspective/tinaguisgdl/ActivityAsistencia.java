@@ -55,7 +55,7 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
     private static int idTianguis = 0,idPuesto = 0,desc1 = 0,idPermisio = 0;
     private Bitmap bm;
     private static Bitmap bm1;
-    private static double metros = 0,subtotal = 0d,total = 0d,costo = 0d,saldo = 0d;
+    private static double metros = 0,subtotal = 0d,total = 0d,costo = 0d,saldo = 0d,saldoa = 0;
     private int anno = 0;
     private Asistencia asistencia = null;
 
@@ -275,6 +275,7 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
                 asistencia = new Asistencia(anno,idTianguis,idPermisio,0,idPuesto,fecha,"N");
 
                 if(gestionBD.consultarAsistencia(asistencia,db) == 0) {
+                    saldoa = saldo;
                     Log.v("entro","if");
                     if(saldo > 0) {
                         if((saldo - total) > 0)
@@ -284,6 +285,7 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
                     }
                     ContentValues cv = new ContentValues();
                     cv.put("saldo",saldo);
+                    cv.put("estatus","N");
                     System.err.print(db.update(gestionBD.TABLE_PERMISIONARIO,cv,"id = " + idPermisio,null) + " update");
                     gestionBD.insertarAsistencia(db, asistencia);
                 }
@@ -425,17 +427,15 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
                                     false);
 
                             if(saldo > 0) {
-                                mBixolonPrinter.printText("Saldo antes de cobro: " + saldo + "\n",
+                                mBixolonPrinter.printText("Saldo antes de cobro: " + saldoa + "\n",
                                         BixolonPrinter.ALIGNMENT_LEFT,
                                         BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
                                         BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
                                         false);
 
-                                if((saldo - total) > 0) {
+                                if((saldo) > 0) {
 
-                                    saldo -= total;
-
-                                    mBixolonPrinter.printText("Saldo despues de cobro: " + (saldo - total) + "\n",
+                                    mBixolonPrinter.printText("Saldo despues de cobro: " + saldo + "\n",
                                             BixolonPrinter.ALIGNMENT_LEFT,
                                             BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
                                             BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
