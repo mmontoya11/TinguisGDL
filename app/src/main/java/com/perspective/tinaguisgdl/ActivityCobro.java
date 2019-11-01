@@ -29,6 +29,9 @@ public class ActivityCobro extends AppCompatActivity implements View.OnClickList
         tvTianguis = findViewById(R.id.tvTianguis);
         tvNombre = findViewById(R.id.tvNombre);
         tvCosto = findViewById(R.id.tvCosto);
+        tvFecha = findViewById(R.id.tvFecha);
+        tvMetro = findViewById(R.id.tvMetros);
+        tvCobro = findViewById(R.id.tvCobro);
         btnQRscanner = findViewById(R.id.btn_nuevoCobro);
 
         btnQRscanner.setOnClickListener(this);
@@ -53,7 +56,7 @@ public class ActivityCobro extends AppCompatActivity implements View.OnClickList
                     iTianguis = Integer.parseInt(dato[2]);
                     tianguis = consultarTianguis(iTianguis);
                     tvTianguis.setText(tianguis);
-                    nombre = dato[5].trim();
+                    nombre = dato[4].trim();
                     tvNombre.setText(nombre);
                     metros = Double.parseDouble(dato[0]);
                     tvMetro.setText(dato[0]);
