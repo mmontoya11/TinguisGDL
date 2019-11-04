@@ -25,14 +25,12 @@ public class GestionBD extends SQLiteOpenHelper {
     public static final String TABLE_C_TIANGUIS = "c_tianguis";
     public static final String TABLE_C_POBLACION = "c_poblacion";
     public static final String TABLE_C_ZONA_TIANGUIS = "c_zona_tianguis";
-
     public static final String TABLE_C_INSPECTORES = "c_inspectores";
     public static final String TABLE_C_DEPENDENCIAS = "c_dependencias";
-
     public static final String TABLE_ASISTENCIA = "asistemcias";
     private ContentValues cv = null;
 
-    private String sqlCrearTablaPermisionario = "CREATE TABLE " + TABLE_PERMISIONARIO +"(id integer,poblacion integer,nombres TEXT,domicilio TEXT,apellidoP TEXT,apellidoM TEXT,status TEXT,EstCiv TEXT)";
+    private String sqlCrearTablaPermisionario = "CREATE TABLE " + TABLE_PERMISIONARIO +"(id integer,poblacion integer,nombres TEXT,domicilio TEXT,apellidoP TEXT,apellidoM TEXT,status TEXT,EstCiv TEXT,estatus TEXT)";
     private String sqlCrearTablaAdministrador = "CREATE TABLE " + TABLE_C_ADMINISTRADOR +"(id integer,vchMaterno TEXT,tynSexo TEXT,chCurp TEXT,vchPaterno TEXT,vchNombre TEXT,EstCiv TEXT)";
     private String sqlCrearGiros  = "CREATE TABLE " + TABLE_C_GIROS_COMERCIALES +"(id integer,smlFamilia INTEGER,tynEstatus TEXT,vchGiroComercial TEXT)";
     private String sqlCrearTablaCTianguis = "CREATE TABLE " + TABLE_C_TIANGUIS +"(id integer,categoria TEXT,estatus TEXT,colonia TEXT,dia TEXT,nombre TEXT,calle_ubicacion TEXT,lunes TEXT,martes TEXT, miercoles Text,jueves text,viernes text,sabado text,domingo text)";
@@ -40,12 +38,9 @@ public class GestionBD extends SQLiteOpenHelper {
     private String sqlCrearTablaPuesto = "CREATE TABLE " + TABLE_PUESTO +"(id integer,iPERMISIO integer,smlTIANGUIS integer,tynDia text,tynSITUACION text)";
     private String sqlCrearTablaConfiguracion = "CREATE TABLE " + TABLE_CONFIGURACIONES +"(id integer,vchPresidente text,vchDirector text,costo_m float,chPeriodo text,vchDependencia text)";
     private String sqlCrearTablaZonaTianguis = "CREATE TABLE " + TABLE_C_ZONA_TIANGUIS +"(id integer,smlZonaTianguis integer,estatus text,smlTianguis integer,CalleCruceIni text,CallePrincipal text,chZonaTianguis text,CalleCruceFin text)";
-
     private String sqlCrearTablaInspectores = "CREATE TABLE " + TABLE_C_INSPECTORES +"(id integer)";
     private String sqlCrearTablaDependencias = "CREATE TABLE " + TABLE_C_DEPENDENCIAS +"(id integer)";
-
-
-    private String sqlCrearTablaAsistencia = "CREATE TABLE " + TABLE_ASISTENCIA + "(id integer,smlAnno integer,vchSemanas text,smlTianguis integer,iPermisionar integer,tynEstado integer,puesto integer)";
+    private String sqlCrearTablaAsistencia = "CREATE TABLE " + TABLE_ASISTENCIA + "(id integer PRIMARY KEY AUTOINCREMENT,smlAnno integer,vchSemanas text,smlTianguis integer,iPermisionar integer,tynEstado integer,puesto integer,estatus TEXT)";
 
 
     public GestionBD(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -117,6 +112,7 @@ public class GestionBD extends SQLiteOpenHelper {
         cv.put("iPermisionar",asistencia.getIdPermisionario());
         cv.put("tynEstado",asistencia.getEstado());
         cv.put("puesto",asistencia.getPuesto());
+        cv.put("estatus",asistencia.getEstatus());
         res = db.insert(this.TABLE_ASISTENCIA,null,cv) > 0;
         return res;
     }
@@ -127,6 +123,7 @@ public class GestionBD extends SQLiteOpenHelper {
                 asistencia.getIdPermisionario()+ " and puesto = " + asistencia.getPuesto();
         Cursor cursor = db.rawQuery(sql,null);
         int count = cursor.getCount();
+        Log.v("total",count + " total");
         return count;
     }
 }

@@ -57,15 +57,6 @@ public class ActivityLoing extends AppCompatActivity {
                     Intent intent = new Intent(ActivityLoing.this, MainActivity.class);
                     startActivity(intent);
 
-                    Boolean isTrue =LoginValidation(db,spInspector.getSelectedItem().toString()  ,Contraseña);
-                    Log.e("Contraseña", isTrue.toString());
-                    if(isTrue){
-                       // Intent intent = new Intent(ActivityLoing.this, MainActivity.class);
-                        startActivity(intent);
-                    }else {
-                        Toast.makeText(getApplicationContext(),"Contraseña Incorrecta volver a intentar", Toast.LENGTH_LONG).show();
-
-                    }
                 }
 
             }

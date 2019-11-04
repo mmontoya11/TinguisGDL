@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
+    useLibrary 'org.apache.http.legacy'
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.perspective.tinaguisgdl"
@@ -34,4 +35,5 @@ dependencies {
     implementation 'com.android.support:cardview-v7:28.0.0'
     implementation files('libs/apache-httpcomponents-httpcore.jar')
     implementation files('libs/BixolonPrinterV229.jar')
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
 }

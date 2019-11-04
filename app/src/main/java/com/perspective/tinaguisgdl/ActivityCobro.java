@@ -6,15 +6,34 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.perspective.tinaguisgdl.Beans.AdapterPayment;
+import com.perspective.tinaguisgdl.Beans.ItemPayment;
 import com.perspective.tinaguisgdl.DB.GestionBD;
 
+import java.util.ArrayList;
+
+import static java.lang.Double.parseDouble;
+
 public class ActivityCobro extends AppCompatActivity implements View.OnClickListener {
-     public TextView tvTianguis,tvNombre,tvCosto,tvFecha,tvMetro,tvCobro;
+
+
+
+
+    ArrayList<ItemPayment> listaPagos;
+    private RecyclerView rvPagos;
+    private RecyclerView.Adapter rvAdapter;
+    private RecyclerView.LayoutManager rvManager;
+
+    public TextView tvTianguis,tvNombre,tvCosto,tvFecha,tvMetro,tvCobro;
      public  Button btnQRscanner;
      private String tianguis = "",nombre = "",fecha = "";
      private GestionBD gestion = null;
@@ -22,13 +41,12 @@ public class ActivityCobro extends AppCompatActivity implements View.OnClickList
      private int iTianguis = 0;
      private double metros = 0d,total = 0d,costo = 0d;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cobro);
         tvTianguis = findViewById(R.id.tvTianguis);
-        tvNombre = findViewById(R.id.tvNombre);
-        tvCosto = findViewById(R.id.tvCosto);
         btnQRscanner = findViewById(R.id.btn_nuevoCobro);
 
         btnQRscanner.setOnClickListener(this);
@@ -37,6 +55,21 @@ public class ActivityCobro extends AppCompatActivity implements View.OnClickList
 
         db = gestion.getReadableDatabase();
 
+        rvPagos = findViewById(R.id.rvPagos);
+
+        listaPagos = new ArrayList<ItemPayment>();
+        listaPagos.add(new ItemPayment("Juan","1a1", "Baratillo", 12,42,12,1));
+        listaPagos.add(new ItemPayment("Juan","1a1", "Baratillo", 12,42,12,1));
+        listaPagos.add(new ItemPayment("Juan","1a1", "Baratillo", 12,42,12,1));
+        listaPagos.add(new ItemPayment("Juan","1a1", "Baratillo", 12,42,12,1));
+        listaPagos.add(new ItemPayment("Juan","1a1", "Baratillo", 12,42,12,1));
+        listaPagos.add(new ItemPayment("Juan","1a1", "Baratillo", 12,42,12,1));
+
+        rvManager = new LinearLayoutManager(this);
+        rvPagos.setLayoutManager(rvManager);
+
+        rvAdapter = new AdapterPayment(this, listaPagos);
+        rvPagos.setAdapter(rvAdapter);
     }
 
     @Override
@@ -55,13 +88,13 @@ public class ActivityCobro extends AppCompatActivity implements View.OnClickList
                     tvTianguis.setText(tianguis);
                     nombre = dato[5].trim();
                     tvNombre.setText(nombre);
-                    metros = Double.parseDouble(dato[0]);
+                    metros = parseDouble(dato[0]);
                     tvMetro.setText(dato[0]);
                     fecha = dato[1];
                     tvFecha.setText(fecha);
                     costo = consultarCosto();
                     tvCosto.setText(String.valueOf(costo));
-                    total = costo * Double.parseDouble(dato[0]);
+                    total = costo * parseDouble(dato[0]);
                     tvCobro.setText(String.valueOf(total));
                 }
             }

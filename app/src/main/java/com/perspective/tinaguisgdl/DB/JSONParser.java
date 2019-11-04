@@ -54,7 +54,7 @@ public class JSONParser {
                 is = httpEntity.getContent();
             }
         } catch (UnsupportedEncodingException e) {
-            Log.e("UnsupportedEncodingException", e.getMessage());
+            Log.e("UnsupportedEncoding", e.getMessage());
         }catch (ClientProtocolException e) {
             Log.e("IOException", e.getMessage());
         }catch (IOException e) {

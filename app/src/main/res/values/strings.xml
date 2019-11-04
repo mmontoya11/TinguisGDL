@@ -2,4 +2,18 @@
     <string name="app_name">Gestion de Tianguis</string>
     <string name="title_activity_asistencia">Toma de Asistencia</string>
     <string name="serch_box"><i>Busque un comerciante...</i></string>
+
+
+
+    <!--                COMIENZA DATOS CARDVIEW_ITEMPAYMENT              -->
+
+    <string name="itempayment_nombre">Nombre del permisionario: </string>
+    <string name="itempayment_puesto">Puesto: </string>
+    <string name="itempayment_metros">Metros lineales: </string>
+    <string name="itempayment_saldo_antes">Saldo antes del cobro: </string>
+    <string name="itempayment_saldo_despues">Saldo despues del cobro: </string>
+    <string name="itempayment_cobro">Cobro total: </string>
+    <string name="itempayment_liquido">Cobro en efectivo: </string>
+    <string name="itempayment_descuento">Descuento: </string>
+
 </resources>
