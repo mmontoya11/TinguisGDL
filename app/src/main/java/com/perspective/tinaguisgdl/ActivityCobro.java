@@ -47,6 +47,8 @@ public class ActivityCobro extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cobro);
         tvTianguis = findViewById(R.id.tvTianguis);
+        tvFecha = findViewById(R.id.tvFecha);
+        tvMetro = findViewById(R.id.tvMetros);
         btnQRscanner = findViewById(R.id.btn_nuevoCobro);
 
         btnQRscanner.setOnClickListener(this);
@@ -58,13 +60,14 @@ public class ActivityCobro extends AppCompatActivity implements View.OnClickList
         rvPagos = findViewById(R.id.rvPagos);
 
         listaPagos = new ArrayList<ItemPayment>();
+        /*
         listaPagos.add(new ItemPayment("Juan","1a1", "Baratillo", 12,42,12,1));
         listaPagos.add(new ItemPayment("Juan","1a1", "Baratillo", 12,42,12,1));
         listaPagos.add(new ItemPayment("Juan","1a1", "Baratillo", 12,42,12,1));
         listaPagos.add(new ItemPayment("Juan","1a1", "Baratillo", 12,42,12,1));
         listaPagos.add(new ItemPayment("Juan","1a1", "Baratillo", 12,42,12,1));
         listaPagos.add(new ItemPayment("Juan","1a1", "Baratillo", 12,42,12,1));
-
+*/
         rvManager = new LinearLayoutManager(this);
         rvPagos.setLayoutManager(rvManager);
 
@@ -86,7 +89,7 @@ public class ActivityCobro extends AppCompatActivity implements View.OnClickList
                     iTianguis = Integer.parseInt(dato[2]);
                     tianguis = consultarTianguis(iTianguis);
                     tvTianguis.setText(tianguis);
-                    nombre = dato[5].trim();
+                    nombre = dato[4].trim();
                     tvNombre.setText(nombre);
                     metros = parseDouble(dato[0]);
                     tvMetro.setText(dato[0]);

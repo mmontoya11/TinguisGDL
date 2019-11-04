@@ -42,8 +42,10 @@
 
     <android.support.v7.widget.CardView
         android:layout_marginTop="30dp"
+        android:id="@+id/cardview_spinner_permisionario"
         android:layout_width="550dp"
         app:cardCornerRadius="10dp"
+        android:visibility="invisible"
         android:layout_gravity="center"
         android:layout_height="wrap_content">
         <LinearLayout
@@ -96,8 +98,10 @@
 
     <android.support.v7.widget.CardView
         android:layout_width="550dp"
+        android:id="@+id/cardview_datos_permisionario"
         android:layout_marginTop="30dp"
         app:cardCornerRadius="10dp"
+        android:visibility="gone"
         android:layout_gravity="center"
         android:layout_height="wrap_content">
 

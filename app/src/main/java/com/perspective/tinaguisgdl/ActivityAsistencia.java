@@ -15,6 +15,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,6 +59,8 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
     private static double metros = 0,subtotal = 0d,total = 0d,costo = 0d,saldo = 0d,saldoa = 0;
     private int anno = 0;
     private Asistencia asistencia = null;
+    private CardView CardView_permisionario;
+    private CardView CardView_datos_permisionario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +95,8 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
         tvGiro = findViewById(R.id.tvGiro);
         tvMetros = findViewById(R.id.tvMetros);
         btnImprimir = findViewById(R.id.btnImprimir);
+        CardView_permisionario = findViewById(R.id.cardview_spinner_permisionario);
+        CardView_datos_permisionario = findViewById(R.id.cardview_datos_permisionario);
 
         tvTianguis.setText("");
         tvFecha.setText("");
@@ -164,12 +169,14 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
                     consultarComerciante(idTia.get(position));
                     tvTianguis.setText("Tianguis " + spTianguis.getSelectedItem().toString() + " del ");
                     idTianguis = idTia.get(position);
+                    CardView_permisionario.setVisibility(View.VISIBLE);
                 }
                 break;
 
             case R.id.spPermisionario:
                 if(position > 0) {
                     datosPermisionario(idTia.get(spTianguis.getSelectedItemPosition()),idPermisionario.get(position));
+                    CardView_datos_permisionario.setVisibility(View.VISIBLE);
                 }
                 break;
 
@@ -272,12 +279,12 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
 
                 showQrCodeDialog(dialog, ActivityAsistencia.this, 0);
 
-                asistencia = new Asistencia(anno,idTianguis,idPermisio,0,idPuesto,fecha,"N");
+                asistencia = new Asistencia(anno,idTianguis,idPermisio,1,idPuesto,fecha,"N");
 
                 if(gestionBD.consultarAsistencia(asistencia,db) == 0) {
                     saldoa = saldo;
                     Log.v("entro","if");
-                    if(saldo > 0) {
+                    /*if(saldo > 0) {
                         if((saldo - total) > 0)
                             saldo -= total;
                          else
@@ -286,7 +293,7 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
                     ContentValues cv = new ContentValues();
                     cv.put("saldo",saldo);
                     cv.put("estatus","N");
-                    System.err.print(db.update(gestionBD.TABLE_PERMISIONARIO,cv,"id = " + idPermisio,null) + " update");
+                    System.err.print(db.update(gestionBD.TABLE_PERMISIONARIO,cv,"id = " + idPermisio,null) + " update");*/
                     gestionBD.insertarAsistencia(db, asistencia);
                 }
                 else {
@@ -427,13 +434,13 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
                                     false);
 
                             if(saldo > 0) {
-                                mBixolonPrinter.printText("Saldo antes de cobro: " + saldoa + "\n",
+                                mBixolonPrinter.printText("Saldo a favor: " + saldoa + "\n",
                                         BixolonPrinter.ALIGNMENT_LEFT,
                                         BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
                                         BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
                                         false);
 
-                                if((saldo) > 0) {
+                                /*if((saldo) > 0) {
 
                                     mBixolonPrinter.printText("Saldo despues de cobro: " + saldo + "\n",
                                             BixolonPrinter.ALIGNMENT_LEFT,
@@ -448,7 +455,7 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
                                             BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
                                             BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
                                             false);
-                                }
+                                }*/
                             }
 
                             mBixolonPrinter.printQrCode(data, BixolonPrinter.ALIGNMENT_CENTER, BixolonPrinter.QR_CODE_MODEL2, 8, true);

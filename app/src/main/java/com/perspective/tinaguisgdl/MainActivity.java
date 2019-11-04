@@ -57,8 +57,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 Intent intent = new Intent(MainActivity.this,ActivityCobro.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
                 startActivity(intent);
-                return true;
+                return false;
             }
         });
 
@@ -83,43 +84,43 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     public void insertar() {
         msj = "";
-        if (!conn.search("http://192.168.43.73/getPermisionario.php").trim().equals("null")) {
-            if(!conn.search("http://192.168.43.73/getPermisionario.php").trim().equals("null")) {
+        if (!conn.search("http://192.168.15.3/getPermisionario.php").trim().equals("null")) {
+            if(!conn.search("http://192.168.15.3/getPermisionario.php").trim().equals("null")) {
                 eliminaRegistros(GestionBD.TABLE_PERMISIONARIO);
-                c.insetarRegistros("http://192.168.43.73/getPermisionario.php", GestionBD.TABLE_PERMISIONARIO);
+                c.insetarRegistros("http://192.168.15.3/getPermisionario.php", GestionBD.TABLE_PERMISIONARIO);
             }
-            if(!conn.search("http://192.168.43.73/getPuestos.php").trim().equals("null")) {
+            if(!conn.search("http://192.168.15.3/getPuestos.php").trim().equals("null")) {
                 eliminaRegistros(GestionBD.TABLE_PUESTO);
-                c.insetarRegistros("http://192.168.43.73/getPuestos.php", GestionBD.TABLE_PUESTO);
+                c.insetarRegistros("http://192.168.15.3/getPuestos.php", GestionBD.TABLE_PUESTO);
             }
-            if(!conn.search("http://192.168.43.73/getConfiguraciones.php").trim().equals("null")) {
+            if(!conn.search("http://192.168.15.3/getConfiguraciones.php").trim().equals("null")) {
                 eliminaRegistros(GestionBD.TABLE_CONFIGURACIONES);
-                c.insetarRegistros("http://192.168.43.73/getConfiguraciones.php", GestionBD.TABLE_CONFIGURACIONES);
+                c.insetarRegistros("http://192.168.15.3/getConfiguraciones.php", GestionBD.TABLE_CONFIGURACIONES);
             }
-            if(!conn.search("http://192.168.43.73/getCAdministrador.php").trim().equals("null")) {
+            if(!conn.search("http://192.168.15.3/getCAdministrador.php").trim().equals("null")) {
                 eliminaRegistros(GestionBD.TABLE_C_ADMINISTRADOR);
-                c.insetarRegistros("http://192.168.43.73/getCAdministrador.php", GestionBD.TABLE_C_ADMINISTRADOR);
+                c.insetarRegistros("http://192.168.15.3/getCAdministrador.php", GestionBD.TABLE_C_ADMINISTRADOR);
             }
-            if(!conn.search("http://192.168.43.73/getCGirosComerciales.php").trim().equals("null")) {
+            if(!conn.search("http://192.168.15.3/getCGirosComerciales.php").trim().equals("null")) {
                 eliminaRegistros(GestionBD.TABLE_C_GIROS_COMERCIALES);
-                c.insetarRegistros("http://192.168.43.73/getCGirosComerciales.php", GestionBD.TABLE_C_GIROS_COMERCIALES);
+                c.insetarRegistros("http://192.168.15.3/getCGirosComerciales.php", GestionBD.TABLE_C_GIROS_COMERCIALES);
             }
-            if(!conn.search("http://192.168.43.73/getCTianguis.php").trim().equals("null")) {
+            if(!conn.search("http://192.168.15.3/getCTianguis.php").trim().equals("null")) {
                 eliminaRegistros(GestionBD.TABLE_C_TIANGUIS);
-                c.insetarRegistros("http://192.168.43.73/getCTianguis.php", GestionBD.TABLE_C_TIANGUIS);
+                c.insetarRegistros("http://192.168.15.3/getCTianguis.php", GestionBD.TABLE_C_TIANGUIS);
             }
-            if(!conn.search("http://192.168.43.73/getCpoblacion.php").trim().equals("null")) {
+            if(!conn.search("http://192.168.15.3/getCpoblacion.php").trim().equals("null")) {
                 eliminaRegistros(GestionBD.TABLE_C_POBLACION);
-                c.insetarRegistros("http://192.168.43.73/getCpoblacion.php", GestionBD.TABLE_C_POBLACION);
+                c.insetarRegistros("http://192.168.15.3/getCpoblacion.php", GestionBD.TABLE_C_POBLACION);
             }
-            if(!conn.search("http://192.168.43.73/CZonaTianguis.php").trim().equals("null")) {
+            if(!conn.search("http://192.168.15.3/CZonaTianguis.php").trim().equals("null")) {
                 eliminaRegistros(GestionBD.TABLE_C_ZONA_TIANGUIS);
-                c.insetarRegistros("http://192.168.43.73/CZonaTianguis.php", GestionBD.TABLE_C_ZONA_TIANGUIS);
+                c.insetarRegistros("http://192.168.15.3/CZonaTianguis.php", GestionBD.TABLE_C_ZONA_TIANGUIS);
             }
             // aqui agrege lo mio
-            if(!conn.search("http://192.168.43.73/getCInspectores.php").trim().equals("null")) {
+            if(!conn.search("http://192.168.15.3/getCInspectores.php").trim().equals("null")) {
                 eliminaRegistros(GestionBD.TABLE_C_INSPECTORES);
-                c.insetarRegistros("http://192.168.43.73/getCInspectores.php", GestionBD.TABLE_C_INSPECTORES);
+                c.insetarRegistros("http://192.168.15.3/getCInspectores.php", GestionBD.TABLE_C_INSPECTORES);
             }
             if(!conn.search("http://192.168.15.7/getCDependencias.php").trim().equals("null")) {
                 eliminaRegistros(GestionBD.TABLE_C_DEPENDENCIAS);
@@ -238,7 +239,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
                 JSONObject jo;
 
-                jo = jparser.realizarHttpRequest("http://192.168.43.73/insertAsistencias.php", "GET", asistencia);
+                jo = jparser.realizarHttpRequest("http://192.168.15.3/insertAsistencias.php", "GET", asistencia);
 
                 try {
                     Log.v("dato1",cursor.getInt(cursor.getColumnIndex("id")) + cursor.getColumnName(0));
@@ -267,7 +268,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
                 JSONObject jo;
 
-                jo = jparser.realizarHttpRequest("http://192.168.43.73/updateSaldo.php", "GET", asistencia);
+                jo = jparser.realizarHttpRequest("http://192.168.15.3/updateSaldo.php", "GET", asistencia);
 
                 try {
                     Log.v("dato saldo",cursor.getInt(cursor.getColumnIndex("id")) + " " + cursor.getColumnName(0));
