@@ -33,9 +33,9 @@ public class ActivityCobro extends AppCompatActivity implements View.OnClickList
     private RecyclerView.Adapter rvAdapter;
     private RecyclerView.LayoutManager rvManager;
 
-    public TextView tvTianguis,tvNombre,tvCosto,tvFecha,tvMetro,tvCobro;
+
      public  Button btnQRscanner;
-     private String tianguis = "",nombre = "",fecha = "";
+     private String tianguis = "",nombre = "",fecha = "", idPuesto="";
      private GestionBD gestion = null;
      private SQLiteDatabase db;
      private int iTianguis = 0;
@@ -46,9 +46,6 @@ public class ActivityCobro extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cobro);
-        tvTianguis = findViewById(R.id.tvTianguis);
-        tvFecha = findViewById(R.id.tvFecha);
-        tvMetro = findViewById(R.id.tvMetros);
         btnQRscanner = findViewById(R.id.btn_nuevoCobro);
 
         btnQRscanner.setOnClickListener(this);
@@ -60,8 +57,8 @@ public class ActivityCobro extends AppCompatActivity implements View.OnClickList
         rvPagos = findViewById(R.id.rvPagos);
 
         listaPagos = new ArrayList<ItemPayment>();
+
         /*
-        listaPagos.add(new ItemPayment("Juan","1a1", "Baratillo", 12,42,12,1));
         listaPagos.add(new ItemPayment("Juan","1a1", "Baratillo", 12,42,12,1));
         listaPagos.add(new ItemPayment("Juan","1a1", "Baratillo", 12,42,12,1));
         listaPagos.add(new ItemPayment("Juan","1a1", "Baratillo", 12,42,12,1));
@@ -69,6 +66,8 @@ public class ActivityCobro extends AppCompatActivity implements View.OnClickList
         listaPagos.add(new ItemPayment("Juan","1a1", "Baratillo", 12,42,12,1));
 */
         rvManager = new LinearLayoutManager(this);
+        ((LinearLayoutManager) rvManager).setReverseLayout(true);
+        rvManager.scrollToPosition(0);
         rvPagos.setLayoutManager(rvManager);
 
         rvAdapter = new AdapterPayment(this, listaPagos);
@@ -85,20 +84,19 @@ public class ActivityCobro extends AppCompatActivity implements View.OnClickList
                 System.err.println(contents);
                 String [] dato = contents.split("\\|");
                 System.err.println(contents.split("\\|")[3] + " da ");
+
                 if (dato.length > 0) {
                     iTianguis = Integer.parseInt(dato[2]);
                     tianguis = consultarTianguis(iTianguis);
-                    tvTianguis.setText(tianguis);
                     nombre = dato[4].trim();
-                    tvNombre.setText(nombre);
+                    idPuesto = dato[1].trim();
                     metros = parseDouble(dato[0]);
-                    tvMetro.setText(dato[0]);
                     fecha = dato[1];
-                    tvFecha.setText(fecha);
                     costo = consultarCosto();
-                    tvCosto.setText(String.valueOf(costo));
                     total = costo * parseDouble(dato[0]);
-                    tvCobro.setText(String.valueOf(total));
+
+                    listaPagos.add(new ItemPayment(nombre, idPuesto, tianguis,metros,0.0, 0.0, total));
+
                 }
             }
         }

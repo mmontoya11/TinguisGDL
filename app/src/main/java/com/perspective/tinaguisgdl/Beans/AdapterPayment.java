@@ -50,6 +50,8 @@ public class AdapterPayment extends RecyclerView.Adapter<AdapterPayment.ViewHold
         holder.mMetrosLineales.setText(String.valueOf(mDataSet.get(position).getMetrosLineales()));
         holder.mSaldoAntes.setText(String.valueOf(mDataSet.get(position).getSaldo()));
         holder.mSaldoDespues.setText(String.valueOf(mDataSet.get(position).getMetrosLineales()));
+        holder.mCobroTotal.setText(String.valueOf(mDataSet.get(position).getCobroTotal()));
+
     }
 
     // Return the size of your dataset (invoked by the layout manager)
