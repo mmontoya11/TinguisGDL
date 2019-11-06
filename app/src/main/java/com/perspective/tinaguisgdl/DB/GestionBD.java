@@ -172,13 +172,13 @@ public class GestionBD extends SQLiteOpenHelper {
 
     public boolean ingresar(SQLiteDatabase db,String... params) {
         boolean res = false;
-        String sql = "Select * from " + TABLE_C_INSPECTORES + " WHERE contrasena = " + params[1];
+        String sql = "Select * from " + TABLE_C_INSPECTORES + " WHERE contrasena = '" + params[1] + "'";
         Log.v("sql",sql);
         Cursor cursor = db.rawQuery(sql,null);
         if(cursor.moveToFirst()) {
             do {
-                Log.v("if1",params[0]);
-                if(cursor.getString(cursor.getColumnIndex("nombre")).contains(params[0])) {
+                Log.v("if1",cursor.getString(cursor.getColumnIndex("contrasena")));
+                if((cursor.getString(cursor.getColumnIndex("nombre")) + " " + cursor.getString(cursor.getColumnIndex("paterno")) + " " + cursor.getString(cursor.getColumnIndex("materno"))).equalsIgnoreCase(params[0])) {
                     Log.v("if",cursor.getString(2));
                     res = true;
                 }

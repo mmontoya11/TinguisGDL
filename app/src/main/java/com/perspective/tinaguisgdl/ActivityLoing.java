@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.perspective.tinaguisgdl.DB.GestionBD;
 import com.perspective.tinaguisgdl.Model.Direccion;
@@ -61,6 +62,10 @@ public class ActivityLoing extends AppCompatActivity implements AdapterView.OnIt
                 if(gestionBD.ingresar(db,spInspector.getSelectedItem().toString(),etContraseña.getText().toString())) {
                     Intent intent = new Intent(ActivityLoing.this, MainActivity.class);
                     startActivity(intent);
+                } else {
+                    Toast toast = Toast.makeText(getApplicationContext(),"Contraseña incorrecta",Toast.LENGTH_LONG);
+                    toast.setGravity(0,0,15);
+                    toast.show();
                 }
 
             }
@@ -90,7 +95,7 @@ public class ActivityLoing extends AppCompatActivity implements AdapterView.OnIt
             nombre = cursor.getString(2) +" "+ cursor.getString(3) + " "+cursor.getString(4) ;
             nombreInspectores.add(nombre.toUpperCase());
             Inspectores.add(nombre.toUpperCase());
-            Log.e("Nombre inspectore.add", nombre);
+            Log.e("Nombre inspectore.add", nombre + " " + cursor.getString(cursor.getColumnIndex("contrasena")));
         }
         adapterInspectores.notifyDataSetChanged();
     }
