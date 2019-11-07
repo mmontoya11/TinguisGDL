@@ -122,9 +122,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 eliminaRegistros(GestionBD.TABLE_C_INSPECTORES);
                 c.insetarRegistros("http://192.168.15.3/getCInspectores.php", GestionBD.TABLE_C_INSPECTORES);
             }
-            if(!conn.search("http://192.168.15.7/getCDependencias.php").trim().equals("null")) {
+            if(!conn.search("http://192.168.15.3/getCDependencias.php").trim().equals("null")) {
                 eliminaRegistros(GestionBD.TABLE_C_DEPENDENCIAS);
-                c.insetarRegistros("http://192.168.15.7/getCDependencias.php", GestionBD.TABLE_C_DEPENDENCIAS);
+                c.insetarRegistros("http://192.168.15.3/getCDependencias.php", GestionBD.TABLE_C_DEPENDENCIAS);
             }
             msj += "Se actualizo COMPLETAMENTE  ";
         } else

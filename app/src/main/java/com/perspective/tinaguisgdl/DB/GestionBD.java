@@ -9,6 +9,8 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.perspective.tinaguisgdl.Model.Asistencia;
+import com.perspective.tinaguisgdl.Model.Direccion;
+import com.perspective.tinaguisgdl.Model.Inspector;
 import com.perspective.tinaguisgdl.Model.Tianguis;
 
 import java.util.ArrayList;
@@ -126,4 +128,63 @@ public class GestionBD extends SQLiteOpenHelper {
         Log.v("total",count + " total");
         return count;
     }
+
+    public List<Direccion> getAllDireccion(String condicion,SQLiteDatabase db) {
+        if(TextUtils.isEmpty(condicion))
+            condicion = "1=1";
+        List<Direccion> direccion = new ArrayList<>();
+        String sql = "SELECT * FROM " + TABLE_C_DEPENDENCIAS + " WHERE " + condicion;
+        Log.v("SQL" , sql);
+        Cursor cursor = db.rawQuery(sql,null);
+        if(cursor.moveToFirst()) {
+            do {
+                Direccion direcciones = cursorToDireccion(cursor);
+                direccion.add(direcciones);
+            } while(cursor.moveToNext());
+        }
+        cursor.close();
+        return direccion;
+    }
+
+    public Direccion cursorToDireccion(Cursor cursor) {
+        return new Direccion(cursor.getInt(cursor.getColumnIndex("id")),cursor.getString(cursor.getColumnIndex("nombre")));
+    }
+
+    public List<String> getAllInspector(String condicion, SQLiteDatabase db) {
+        if(TextUtils.isEmpty(condicion))
+            condicion = "1=1";
+        List<String> inspector = new ArrayList<>();
+        String sql = "SELECT * FROM " + TABLE_C_INSPECTORES + " WHERE " + condicion;
+        Log.v("SQL" , sql);
+        Cursor cursor = db.rawQuery(sql,null);
+        if(cursor.moveToFirst()) {
+            do {
+                inspector.add(cursorToInspector(cursor));
+            } while(cursor.moveToNext());
+        }
+        cursor.close();
+        return inspector;
+    }
+
+    public String cursorToInspector(Cursor cursor) {
+        return cursor.getString(cursor.getColumnIndex("nombre")) + " " + cursor.getString(cursor.getColumnIndex("paterno")) + " " + cursor.getString(cursor.getColumnIndex("materno"));
+    }
+
+    public boolean ingresar(SQLiteDatabase db,String... params) {
+        boolean res = false;
+        String sql = "Select * from " + TABLE_C_INSPECTORES + " WHERE contrasena = '" + params[1] + "'";
+        Log.v("sql",sql);
+        Cursor cursor = db.rawQuery(sql,null);
+        if(cursor.moveToFirst()) {
+            do {
+                Log.v("if1",cursor.getString(cursor.getColumnIndex("contrasena")));
+                if((cursor.getString(cursor.getColumnIndex("nombre")) + " " + cursor.getString(cursor.getColumnIndex("paterno")) + " " + cursor.getString(cursor.getColumnIndex("materno"))).equalsIgnoreCase(params[0])) {
+                    Log.v("if",cursor.getString(2));
+                    res = true;
+                }
+            }while (cursor.moveToNext());
+        }
+        return res;
+    }
+
 }
