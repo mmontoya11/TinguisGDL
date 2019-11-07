@@ -67,7 +67,8 @@ public class ActivityCobro extends AppCompatActivity implements View.OnClickList
 */
         rvManager = new LinearLayoutManager(this);
         ((LinearLayoutManager) rvManager).setReverseLayout(true);
-        rvManager.scrollToPosition(0);
+        ((LinearLayoutManager) rvManager).setStackFromEnd(true);
+        rvManager.scrollToPosition(listaPagos.size()+1);
         rvPagos.setLayoutManager(rvManager);
 
         rvAdapter = new AdapterPayment(this, listaPagos);

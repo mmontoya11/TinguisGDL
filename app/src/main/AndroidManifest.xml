@@ -17,8 +17,8 @@
         android:theme="@style/AppTheme">
 
         <activity android:name=".ActivityCobro"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|fontScale"
+           />
 
         <activity android:name=".ActivityLoing"
             android:screenOrientation="portrait">
