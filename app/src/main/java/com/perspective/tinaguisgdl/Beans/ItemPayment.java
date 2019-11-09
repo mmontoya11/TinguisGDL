@@ -10,6 +10,7 @@ public class ItemPayment {
     private double CobroLiquido;
     private double CobroTotal;
     private int iPermisio,idTianguis;
+    private boolean pago;
 
     public double getSaldoDespues() {
         return saldoDespues;
@@ -31,9 +32,10 @@ public class ItemPayment {
         CobroTotal = 0;
         saldoDespues = 0d;
         iPermisio = 0;
+        pago = false;
     }
 
-    public ItemPayment(String nombrePermisionario, String puesto, String tianguis, double metroLineal, double saldo, double cobroLiquido, double cobroTotal,double saldoDespues,int iPermisio) {
+    public ItemPayment(String nombrePermisionario, String puesto, String tianguis, double metroLineal, double saldo, double cobroLiquido, double cobroTotal,double saldoDespues,int iPermisio, boolean pago) {
         NombrePermisionario = nombrePermisionario;
         Puesto = puesto;
         Tianguis = tianguis;
@@ -44,7 +46,7 @@ public class ItemPayment {
         SaldoDespues = saldoDespues;
         this.iPermisio = iPermisio;
         this.idTianguis = idTianguis;
-
+        this.pago = pago;
     }
 
     public String getNombrePermisionario() {
@@ -117,6 +119,14 @@ public class ItemPayment {
 
     public void setIdTianguis(int idTianguis) {
         this.idTianguis = idTianguis;
+    }
+
+    public boolean isPago() {
+        return pago;
+    }
+
+    public void setPago(boolean pago) {
+        this.pago = pago;
     }
 
     @Override

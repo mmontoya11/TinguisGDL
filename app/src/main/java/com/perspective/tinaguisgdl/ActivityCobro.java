@@ -60,6 +60,7 @@ public class ActivityCobro extends AppCompatActivity implements View.OnClickList
     private Bitmap bm;
     private static Bitmap bm1;
     private static Context context;
+    private boolean pago = false;
 
 
     @Override
@@ -120,6 +121,7 @@ public class ActivityCobro extends AppCompatActivity implements View.OnClickList
                 saldoa = 0;
 
                 if (dato.length > 0) {
+                    pago = false;
                     iTianguis = parseInt(dato[2]);
                     tianguis = consultarTianguis(iTianguis);
                     nombre = dato[4].trim();
@@ -131,6 +133,14 @@ public class ActivityCobro extends AppCompatActivity implements View.OnClickList
                     saldo = gestion.consultarSalo(parseInt(dato[5]),db);
                     saldoa = saldo;
                     Log.v("saldos",saldo + "");
+
+                    pago = gestion.consultaPagos(parseInt(dato[5]),fecha,db);
+
+                    if(pago) {
+                        Toast toast = Toast.makeText(getApplicationContext(),"Ya se escaneo el Ticket",Toast.LENGTH_LONG);
+                        toast.setGravity(0,0,15);
+                        toast.show();
+                    }
 
                     if(saldo >= 0) {
                         if((saldo - total) > 0) {
@@ -145,7 +155,7 @@ public class ActivityCobro extends AppCompatActivity implements View.OnClickList
 
                     Log.v("saldos",saldo + " saldoa " + saldoa + " cobro " + cobrol);
 
-                    listaPagos.add(new ItemPayment(nombre, idPuesto, tianguis,metros,saldoa, cobrol, total,saldo,parseInt(dato[5])));
+                    listaPagos.add(new ItemPayment(nombre, idPuesto, tianguis,metros,saldoa, cobrol, total,saldo,parseInt(dato[5]),pago));
 
                 }
             }

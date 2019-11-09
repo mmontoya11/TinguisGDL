@@ -45,7 +45,7 @@ public class GestionBD extends SQLiteOpenHelper {
     private String sqlCrearTablaInspectores = "CREATE TABLE " + TABLE_C_INSPECTORES +"(c_dependencia_id integer,nombre TEXT,paterno text,materno text,contrasena text)";
     private String sqlCrearTablaDependencias = "CREATE TABLE " + TABLE_C_DEPENDENCIAS +"(id integer,nombre text)";
     private String sqlCrearTablaAsistencia = "CREATE TABLE " + TABLE_ASISTENCIA + "(id integer PRIMARY KEY AUTOINCREMENT,smlAnno integer,vchSemanas text,smlTianguis integer,iPermisionar integer,tynEstado integer,puesto integer,estatus TEXT)";
-    private String sqlCrearTablaPago = "CREATE TABLE " + TABLE_PAGOS + "(id integer PRIMARY KEY AUTOINCREMENT,permisionario integer,cargo real,concepto TEXT,puesto integer,saldo real,abono real,estatus TEXT,saldoa real)";
+    private String sqlCrearTablaPago = "CREATE TABLE " + TABLE_PAGOS + "(id integer PRIMARY KEY AUTOINCREMENT,permisionario integer,cargo real,concepto TEXT,puesto integer,saldo real,abono real,estatus TEXT,saldoa real,fecha numeric)";
 
     public GestionBD(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
@@ -233,6 +233,19 @@ public class GestionBD extends SQLiteOpenHelper {
             saldo = cursor.getDouble(cursor.getColumnIndex("saldo"));
         Log.v("total",saldo + " saldo");
         return saldo;
+    }
+
+    public boolean consultaPagos(int idPermisio,String fecha,SQLiteDatabase db) {
+        boolean res = false;
+        String sql = "SELECT * FROM " + TABLE_PAGOS + " where ID = " + idPermisio + " and fecha between '"+fecha+" 00:00 and '"+fecha+"' 23:59";
+        Log.v("sql",sql);
+        Cursor cursor = db.rawQuery(sql,null);
+        if(cursor.moveToFirst())
+            if(cursor.getCount() > 0)
+                res =  true;
+            else
+                res = false;
+        return res;
     }
 
 }

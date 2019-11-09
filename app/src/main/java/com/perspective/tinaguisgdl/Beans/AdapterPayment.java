@@ -72,11 +72,21 @@ public class AdapterPayment extends RecyclerView.Adapter<AdapterPayment.ViewHold
         holder.mCobroTotal.setText(String.valueOf(mDataSet.get(position).getCobroTotal()));
         holder.btnImprimir.setVisibility(View.GONE);
 
+        boolean pago;
+        pago = mDataSet.get(position).isPago();
+
+        if(pago) {
+            holder.mCobrar.setVisibility(View.GONE);
+        }else {
+            holder.btnImprimir.setVisibility(View.VISIBLE);
+        }
+
         holder.mCobrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.v("click","button");
                 Double saldo = 0d,saldoa = 0d,total = 0d;
+
                 saldo = mDataSet.get(position).getSaldoDespues();
                 saldoa = mDataSet.get(position).getSaldo();
                 total = mDataSet.get(position).getCobroTotal();
