@@ -357,7 +357,7 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
                         public void onClick(DialogInterface dialog, int which) {
-                            String data = metros+"|"+fecha + "|"+idTianguis + "|" + idPuesto + "|"  + nombre + "|";
+                            String data = metros+"|"+fecha + "|"+idTianguis + "|" + idPuesto + "|"  + nombre + "|" + idPermisio;
 
 
                             mBixolonPrinter.setSingleByteFont(BixolonPrinter.CODE_PAGE_1252_LATIN1);
@@ -473,5 +473,7 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
         }
         dialog.show();
     }
+
+
 
 }

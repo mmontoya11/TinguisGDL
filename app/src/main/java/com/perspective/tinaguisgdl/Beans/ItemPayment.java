@@ -6,8 +6,20 @@ public class ItemPayment {
     private String Tianguis;
     private double MetrosLineales;
     private double Saldo;
+    private double SaldoDespues;
     private double CobroLiquido;
     private double CobroTotal;
+    private int iPermisio,idTianguis;
+
+    public double getSaldoDespues() {
+        return saldoDespues;
+    }
+
+    public void setSaldoDespues(double saldoDespues) {
+        this.saldoDespues = saldoDespues;
+    }
+
+    private double saldoDespues;
 
     public ItemPayment() {
         NombrePermisionario = "";
@@ -17,9 +29,11 @@ public class ItemPayment {
         Saldo = 0;
         CobroLiquido = 0;
         CobroTotal = 0;
+        saldoDespues = 0d;
+        iPermisio = 0;
     }
 
-    public ItemPayment(String nombrePermisionario, String puesto, String tianguis, double metroLineal, double saldo, double cobroLiquido, double cobroTotal) {
+    public ItemPayment(String nombrePermisionario, String puesto, String tianguis, double metroLineal, double saldo, double cobroLiquido, double cobroTotal,double saldoDespues,int iPermisio) {
         NombrePermisionario = nombrePermisionario;
         Puesto = puesto;
         Tianguis = tianguis;
@@ -27,6 +41,10 @@ public class ItemPayment {
         Saldo = saldo;
         CobroLiquido = cobroLiquido;
         CobroTotal = cobroTotal;
+        SaldoDespues = saldoDespues;
+        this.iPermisio = iPermisio;
+        this.idTianguis = idTianguis;
+
     }
 
     public String getNombrePermisionario() {
@@ -83,6 +101,22 @@ public class ItemPayment {
 
     public void setCobroTotal(double cobroTotal) {
         CobroTotal = cobroTotal;
+    }
+
+    public int getIPermisio() {
+        return iPermisio;
+    }
+
+    public void setIPermisio(int IPermisio) {
+        this.iPermisio = IPermisio;
+    }
+
+    public int getIdTianguis() {
+        return idTianguis;
+    }
+
+    public void setIdTianguis(int idTianguis) {
+        this.idTianguis = idTianguis;
     }
 
     @Override

@@ -17,7 +17,7 @@
         android:theme="@style/AppTheme">
 
         <activity android:name=".ActivityCobro"
-            android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|fontScale"
+            android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|fontScale|screenSize"
            />
 
         <activity android:name=".ActivityLoing"

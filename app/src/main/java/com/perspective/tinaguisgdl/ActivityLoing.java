@@ -92,7 +92,7 @@ public class ActivityLoing extends AppCompatActivity implements AdapterView.OnIt
         String nombre;
         Inspectores.clear();
         while (cursor.moveToNext()){
-            nombre = cursor.getString(2) +" "+ cursor.getString(3) + " "+cursor.getString(4) ;
+            nombre = cursor.getString(1) +" "+ cursor.getString(2) + " "+cursor.getString(3) ;
             nombreInspectores.add(nombre.toUpperCase());
             Inspectores.add(nombre.toUpperCase());
             Log.e("Nombre inspectore.add", nombre + " " + cursor.getString(cursor.getColumnIndex("contrasena")));

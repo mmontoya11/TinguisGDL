@@ -11,6 +11,7 @@ import android.util.Log;
 import com.perspective.tinaguisgdl.Model.Asistencia;
 import com.perspective.tinaguisgdl.Model.Direccion;
 import com.perspective.tinaguisgdl.Model.Inspector;
+import com.perspective.tinaguisgdl.Model.Pagos;
 import com.perspective.tinaguisgdl.Model.Tianguis;
 
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class GestionBD extends SQLiteOpenHelper {
     public static final String TABLE_C_INSPECTORES = "c_inspectores";
     public static final String TABLE_C_DEPENDENCIAS = "c_dependencias";
     public static final String TABLE_ASISTENCIA = "asistemcias";
+    public static final String TABLE_PAGOS = "pagos";
     private ContentValues cv = null;
 
     private String sqlCrearTablaPermisionario = "CREATE TABLE " + TABLE_PERMISIONARIO +"(id integer,poblacion integer,nombres TEXT,domicilio TEXT,apellidoP TEXT,apellidoM TEXT,status TEXT,EstCiv TEXT,estatus TEXT)";
@@ -40,10 +42,10 @@ public class GestionBD extends SQLiteOpenHelper {
     private String sqlCrearTablaPuesto = "CREATE TABLE " + TABLE_PUESTO +"(id integer,iPERMISIO integer,smlTIANGUIS integer,tynDia text,tynSITUACION text)";
     private String sqlCrearTablaConfiguracion = "CREATE TABLE " + TABLE_CONFIGURACIONES +"(id integer,vchPresidente text,vchDirector text,costo_m float,chPeriodo text,vchDependencia text)";
     private String sqlCrearTablaZonaTianguis = "CREATE TABLE " + TABLE_C_ZONA_TIANGUIS +"(id integer,smlZonaTianguis integer,estatus text,smlTianguis integer,CalleCruceIni text,CallePrincipal text,chZonaTianguis text,CalleCruceFin text)";
-    private String sqlCrearTablaInspectores = "CREATE TABLE " + TABLE_C_INSPECTORES +"(id integer)";
-    private String sqlCrearTablaDependencias = "CREATE TABLE " + TABLE_C_DEPENDENCIAS +"(id integer)";
+    private String sqlCrearTablaInspectores = "CREATE TABLE " + TABLE_C_INSPECTORES +"(c_dependencia_id integer,nombre TEXT,paterno text,materno text,contrasena text)";
+    private String sqlCrearTablaDependencias = "CREATE TABLE " + TABLE_C_DEPENDENCIAS +"(id integer,nombre text)";
     private String sqlCrearTablaAsistencia = "CREATE TABLE " + TABLE_ASISTENCIA + "(id integer PRIMARY KEY AUTOINCREMENT,smlAnno integer,vchSemanas text,smlTianguis integer,iPermisionar integer,tynEstado integer,puesto integer,estatus TEXT)";
-
+    private String sqlCrearTablaPago = "CREATE TABLE " + TABLE_PAGOS + "(id integer PRIMARY KEY AUTOINCREMENT,permisionario integer,cargo real,concepto TEXT,puesto integer,saldo real,abono real,estatus TEXT,saldoa real)";
 
     public GestionBD(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
@@ -62,6 +64,10 @@ public class GestionBD extends SQLiteOpenHelper {
         db.execSQL(sqlCrearTablaInspectores);
         db.execSQL(sqlCrearTablaDependencias);
         db.execSQL(sqlCrearTablaAsistencia);
+        db.execSQL(sqlCrearTablaPago);
+
+        ingresarDir(db);
+        ingresarIns(db);
     }
 
     @Override
@@ -116,6 +122,21 @@ public class GestionBD extends SQLiteOpenHelper {
         cv.put("puesto",asistencia.getPuesto());
         cv.put("estatus",asistencia.getEstatus());
         res = db.insert(this.TABLE_ASISTENCIA,null,cv) > 0;
+        return res;
+    }
+
+    public boolean insertarPagos(SQLiteDatabase db, Pagos pago) {
+        boolean res = false;
+        cv = new ContentValues();
+        cv.put("permisionario",pago.getPermisionario());
+        cv.put("cargo",pago.getCargo());
+        cv.put("concepto",pago.getConcepto());
+        cv.put("puesto",pago.getPuesto());
+        cv.put("saldo",pago.getSaldo());
+        cv.put("abono",pago.getAbono());
+        cv.put("estatus",pago.getEstatus());
+        cv.put("saldoa",pago.getSaldoa());
+        res = db.insert(this.TABLE_PAGOS,null,cv) > 0;
         return res;
     }
 
@@ -179,12 +200,39 @@ public class GestionBD extends SQLiteOpenHelper {
             do {
                 Log.v("if1",cursor.getString(cursor.getColumnIndex("contrasena")));
                 if((cursor.getString(cursor.getColumnIndex("nombre")) + " " + cursor.getString(cursor.getColumnIndex("paterno")) + " " + cursor.getString(cursor.getColumnIndex("materno"))).equalsIgnoreCase(params[0])) {
-                    Log.v("if",cursor.getString(2));
+                    Log.v("if",cursor.getString(1));
                     res = true;
                 }
             }while (cursor.moveToNext());
         }
         return res;
+    }
+
+    public void ingresarDir(SQLiteDatabase db) {
+        ContentValues cv = new ContentValues();
+        cv.put("id",1);
+        cv.put("nombre","Administración");
+        db.insert(TABLE_C_DEPENDENCIAS,null,cv);
+    }
+
+    public void ingresarIns(SQLiteDatabase db) {
+        ContentValues cv = new ContentValues();
+        cv.put("c_dependencia_id",1);
+        cv.put("nombre","administrador");
+        cv.put("contrasena","4dm1n");
+        cv.put("c_dependencia_id",1);
+        db.insert(TABLE_C_INSPECTORES,null,cv);
+    }
+
+    public double consultarSalo(int idPermisio,SQLiteDatabase db) {
+        double saldo = 0;
+        String sql = "SELECT * FROM " + TABLE_PERMISIONARIO + " where ID = " + idPermisio;
+        Log.v("sql",sql);
+        Cursor cursor = db.rawQuery(sql,null);
+        if(cursor.moveToFirst())
+            saldo = cursor.getDouble(cursor.getColumnIndex("saldo"));
+        Log.v("total",saldo + " saldo");
+        return saldo;
     }
 
 }
