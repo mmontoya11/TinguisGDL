@@ -101,7 +101,7 @@
         android:id="@+id/cardview_datos_permisionario"
         android:layout_marginTop="30dp"
         app:cardCornerRadius="10dp"
-        android:visibility="visible"
+        android:visibility="invisible"
         android:layout_gravity="center"
         android:layout_height="wrap_content">
 
@@ -136,15 +136,6 @@
 
             </LinearLayout>
 
-
-
-
-
-
-
-
-
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:orientation="horizontal"
@@ -164,13 +155,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Luis perez"/>
-                <Switch
-                    android:layout_marginLeft="200dp"
-                    android:text="Asistencia"
-                    android:checked="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    />
 
             </LinearLayout>
             <LinearLayout
@@ -239,6 +223,17 @@
                     android:text="Ticket sin emitir"/>
 
             </LinearLayout>
+
+            <Switch
+                android:layout_marginLeft="200dp"
+                android:text="Asistencia"
+                android:checked="true"
+                android:gravity="left"
+                android:layout_marginTop="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+
             <Button
                 android:id="@+id/btnImprimir"
                 android:layout_marginTop="25dp"

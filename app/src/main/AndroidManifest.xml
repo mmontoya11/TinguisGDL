@@ -15,13 +15,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name=".ActivityCobro"
-            android:screenOrientation="portrait"
+        <activity android:name=".SplashScreenActivity"></activity>
+        <activity
+            android:name=".ActivityCobro"
             android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|fontScale|screenSize"
-           />
-
-        <activity android:name=".ActivityLoing"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ActivityLoing"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,14 +29,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ActivityAsistencia"
             android:label="@string/title_activity_asistencia"
-            android:screenOrientation="portrait"/>
-
-        <activity android:name=".MainActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
