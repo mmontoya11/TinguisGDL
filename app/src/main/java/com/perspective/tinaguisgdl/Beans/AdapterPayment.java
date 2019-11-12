@@ -64,7 +64,7 @@ public class AdapterPayment extends RecyclerView.Adapter<AdapterPayment.ViewHold
         saldoD = mDataSet.get(position).getSaldo() - mDataSet.get(position).getCobroTotal();
 
         holder.mPermisionarioNombre.setText( mDataSet.get(position).getNombrePermisionario());
-        holder.mPuesto.setText(mDataSet.get(position).getPuesto());
+        holder.mPuesto.setText(mDataSet.get(position).getIdPuesto() + "");
         holder.mTianguis.setText(mDataSet.get(position).getTianguis());
         holder.mMetrosLineales.setText(String.valueOf(mDataSet.get(position).getMetrosLineales()));
         holder.mSaldoAntes.setText(String.valueOf(mDataSet.get(position).getSaldo()));
@@ -98,7 +98,7 @@ public class AdapterPayment extends RecyclerView.Adapter<AdapterPayment.ViewHold
                 cv.put("saldo",saldo);
                 cv.put("estatus","N");
                 System.err.print(ActivityCobro.db.update(ActivityCobro.gestion.TABLE_PERMISIONARIO,cv,"id = " + mDataSet.get(position).getIPermisio(),null) + " update");
-                Pagos pagos = new Pagos(mDataSet.get(position).getIPermisio(),mDataSet.get(position).getIdTianguis(),"PAGO","N",total,saldoa,0,saldo);
+                Pagos pagos = new Pagos(mDataSet.get(position).getIPermisio(),mDataSet.get(position).getIdPuesto(),"PAGO","N",total,saldoa,0,saldo,mDataSet.get(position).getFecha());
                 Log.v("pagos",ActivityCobro.gestion.insertarPagos(ActivityCobro.db,pagos) + " <-");
                 holder.btnImprimir.setVisibility(View.VISIBLE);
                 holder.mCobrar.setVisibility(View.GONE);

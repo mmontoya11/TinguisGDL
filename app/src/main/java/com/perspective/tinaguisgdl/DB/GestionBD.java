@@ -136,6 +136,7 @@ public class GestionBD extends SQLiteOpenHelper {
         cv.put("abono",pago.getAbono());
         cv.put("estatus",pago.getEstatus());
         cv.put("saldoa",pago.getSaldoa());
+        cv.put("fecha",pago.getFecha());
         res = db.insert(this.TABLE_PAGOS,null,cv) > 0;
         return res;
     }
@@ -239,14 +240,21 @@ public class GestionBD extends SQLiteOpenHelper {
 
     public boolean consultaPagos(int idPermisio,String fecha,SQLiteDatabase db) {
         boolean res = false;
-        String sql = "SELECT * FROM " + TABLE_PAGOS + " where ID = " + idPermisio + " and fecha between '"+fecha+" 00:00' and '"+fecha+" 23:59'";
+        String sql = "SELECT * FROM " + TABLE_PAGOS + " where permisionario = " + idPermisio/* + " and fecha between '" + fecha + " 00:00' and '" + fecha + " 23:59'"*/;
         Log.v("sql",sql);
         Cursor cursor = db.rawQuery(sql,null);
-        if(cursor.moveToFirst())
-            if(cursor.getCount() > 0)
-                res =  true;
-            else
-                res = false;
+        Log.v("total",cursor.getCount() + " <-");
+        try {
+            if (cursor.moveToFirst()) {
+                Log.v("fecha", cursor.getString(cursor.getColumnIndex("fecha")) + " " + fecha );
+                do {
+                    if (fecha.equalsIgnoreCase(cursor.getString(cursor.getColumnIndex("fecha"))))
+                        return true;
+                } while (cursor.moveToNext());
+            }
+        }catch (Exception e) {
+
+        }
         return res;
     }
 
