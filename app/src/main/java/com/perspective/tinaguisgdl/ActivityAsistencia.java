@@ -447,7 +447,7 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
                                     BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
                                     false);
 
-                            if(saldo > 0) {
+                            //if(saldo > 0) {
                                 mBixolonPrinter.printText("Saldo a favor: " + format.format(saldoa) + "\n",
                                         BixolonPrinter.ALIGNMENT_LEFT,
                                         BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
@@ -470,7 +470,7 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
                                             BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
                                             false);
                                 }*/
-                            }
+                            //}
 
                             mBixolonPrinter.printQrCode(data, BixolonPrinter.ALIGNMENT_CENTER, BixolonPrinter.QR_CODE_MODEL2, 8, true);
                             mBixolonPrinter.lineFeed(3, false);

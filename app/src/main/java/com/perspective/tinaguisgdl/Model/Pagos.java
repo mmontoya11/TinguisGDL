@@ -3,7 +3,7 @@ package com.perspective.tinaguisgdl.Model;
 public class Pagos {
 
     private int id,permisionario,puesto;
-    private String concepto,estatus;
+    private String concepto,estatus,fecha;
     private double cargo,saldo,abono,saldoa;
 
     public Pagos() {
@@ -30,7 +30,7 @@ public class Pagos {
         this.saldoa = saldoa;
     }
 
-    public Pagos(int permisionario, int puesto, String concepto, String estatus, double cargo, double saldo, double abono,double saldoa) {
+    public Pagos(int permisionario, int puesto, String concepto, String estatus, double cargo, double saldo, double abono,double saldoa,String fecha) {
         this.permisionario = permisionario;
         this.puesto = puesto;
         this.concepto = concepto;
@@ -39,6 +39,7 @@ public class Pagos {
         this.saldo = saldo;
         this.abono = abono;
         this.saldoa = saldoa;
+        this.fecha = fecha;
     }
 
     public int getId() {
@@ -111,5 +112,13 @@ public class Pagos {
 
     public void setSaldoa(double saldoa) {
         this.saldoa = saldoa;
+    }
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
     }
 }

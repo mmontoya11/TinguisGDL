@@ -50,7 +50,7 @@ public class ActivityCobro extends AppCompatActivity implements View.OnClickList
 
 
      public  Button btnQRscanner;
-     private String idPuesto="";
+     private int idPuesto=0;
      private static String fecha = "",tianguis = "",nombre = "";
      public static GestionBD gestion = null;
      public static SQLiteDatabase db;
@@ -130,7 +130,7 @@ public class ActivityCobro extends AppCompatActivity implements View.OnClickList
                     iTianguis = parseInt(dato[2]);
                     tianguis = consultarTianguis(iTianguis);
                     nombre = dato[4].trim();
-                    idPuesto = dato[1].trim();
+                    idPuesto = Integer.parseInt(dato[3].trim());
                     metros = parseDouble(dato[0]);
                     fecha = dato[1];
                     costo = consultarCosto();
@@ -160,7 +160,7 @@ public class ActivityCobro extends AppCompatActivity implements View.OnClickList
 
                     Log.v("saldos",saldo + " saldoa " + saldoa + " cobro " + cobrol);
 
-                    listaPagos.add(new ItemPayment(nombre, idPuesto, tianguis,metros,saldoa, cobrol, total,saldo,parseInt(dato[5]),pago));
+                    listaPagos.add(new ItemPayment(nombre, idPuesto, tianguis,metros,saldoa, cobrol, total,saldo,parseInt(dato[5]),pago,fecha));
 
                 }
             }

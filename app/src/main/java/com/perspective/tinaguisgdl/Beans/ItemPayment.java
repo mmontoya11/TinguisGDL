@@ -2,7 +2,7 @@ package com.perspective.tinaguisgdl.Beans;
 
 public class ItemPayment {
     public String NombrePermisionario;
-    private String Puesto;
+    private int idPuesto;
     private String Tianguis;
     private double MetrosLineales;
     private double Saldo;
@@ -11,6 +11,7 @@ public class ItemPayment {
     private double CobroTotal;
     private int iPermisio,idTianguis;
     private boolean pago;
+    private String fecha;
 
     public double getSaldoDespues() {
         return saldoDespues;
@@ -24,7 +25,7 @@ public class ItemPayment {
 
     public ItemPayment() {
         NombrePermisionario = "";
-        Puesto = "";
+        idPuesto = 0;
         Tianguis = "";
         MetrosLineales = 0;
         Saldo = 0;
@@ -33,11 +34,12 @@ public class ItemPayment {
         saldoDespues = 0d;
         iPermisio = 0;
         pago = false;
+        fecha = "";
     }
 
-    public ItemPayment(String nombrePermisionario, String puesto, String tianguis, double metroLineal, double saldo, double cobroLiquido, double cobroTotal,double saldoDespues,int iPermisio, boolean pago) {
+    public ItemPayment(String nombrePermisionario, int idPuesto, String tianguis, double metroLineal, double saldo, double cobroLiquido, double cobroTotal,double saldoDespues,int iPermisio, boolean pago,String fecha) {
         NombrePermisionario = nombrePermisionario;
-        Puesto = puesto;
+        this.idPuesto = idPuesto;
         Tianguis = tianguis;
         MetrosLineales = metroLineal;
         Saldo = saldo;
@@ -45,8 +47,8 @@ public class ItemPayment {
         CobroTotal = cobroTotal;
         SaldoDespues = saldoDespues;
         this.iPermisio = iPermisio;
-        this.idTianguis = idTianguis;
         this.pago = pago;
+        this.fecha = fecha;
     }
 
     public String getNombrePermisionario() {
@@ -57,12 +59,12 @@ public class ItemPayment {
         NombrePermisionario = nombrePermisionario;
     }
 
-    public String getPuesto() {
-        return Puesto;
+    public int getIdPuesto() {
+        return idPuesto;
     }
 
-    public void setPuesto(String puesto) {
-        Puesto = puesto;
+    public void setPuesto(int idPuesto) {
+        this.idPuesto = idPuesto;
     }
 
     public String getTianguis() {
@@ -129,11 +131,19 @@ public class ItemPayment {
         this.pago = pago;
     }
 
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
+    }
+
     @Override
     public String toString() {
         return "ItemPayment{" +
                 "NombrePermisionario='" + NombrePermisionario + '\'' +
-                ", Puesto='" + Puesto + '\'' +
+                ", Puesto='" + idPuesto + '\'' +
                 ", Tianguis='" + Tianguis + '\'' +
                 ", MetrosLineales=" + MetrosLineales +
                 ", Saldo=" + Saldo +
