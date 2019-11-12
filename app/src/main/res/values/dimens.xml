@@ -2,5 +2,6 @@
 <resources>
     <dimen name="padding_top">10dp</dimen>
     <dimen name="padding_right">5dp</dimen>
-
+    <dimen name="height_cardView_Button_main">175dp</dimen>
+    <dimen name="layout_marginTop_image_cardView">30dp</dimen>
 </resources>

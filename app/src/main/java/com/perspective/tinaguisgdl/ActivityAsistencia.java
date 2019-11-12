@@ -131,7 +131,7 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
                     btnImprimir.setBackgroundResource(R.drawable.btn_rounded);
                     btnImprimir.setText("TOMAR ASISTENCIA");
                 }else {
-                    textViewAsistencia.setText("falta");
+                    textViewAsistencia.setText("Falta");
                     btnImprimir.setText("TOMAR FALTA");
                     btnImprimir.setBackgroundResource(btn_rounded_red);
 

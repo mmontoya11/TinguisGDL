@@ -198,7 +198,7 @@
                 android:layout_width="100dp"
                 android:src="@drawable/cobro"
                 android:layout_marginTop="35dp"
-                android:layout_marginLeft="80dp"
+                android:layout_marginLeft="115dp"
                 android:layout_height="100dp" />
         </RelativeLayout>
 

@@ -78,6 +78,7 @@ public class AdapterPayment extends RecyclerView.Adapter<AdapterPayment.ViewHold
         if(pago) {
             holder.mCobrar.setVisibility(View.GONE);
             holder.btnImprimir.setVisibility(View.VISIBLE);
+            holder.mImageView.setImageResource(R.drawable.chceck);
         }else {
             holder.btnImprimir.setVisibility(View.GONE);
             holder.mCobrar.setVisibility(View.VISIBLE);
