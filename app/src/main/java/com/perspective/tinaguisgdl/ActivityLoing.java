@@ -60,7 +60,9 @@ public class ActivityLoing extends AppCompatActivity implements AdapterView.OnIt
                 Log.e("Contraseña", Contraseña);
 
                 if(gestionBD.ingresar(db,spInspector.getSelectedItem().toString(),etContraseña.getText().toString())) {
-                    Intent intent = new Intent(ActivityLoing.this, MainActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("inspector",spInspector.getSelectedItem().toString());
+                    Intent intent = new Intent(ActivityLoing.this, MainActivity.class).putExtras(bundle);
                     startActivity(intent);
                 } else {
                     Toast toast = Toast.makeText(getApplicationContext(),"Contraseña incorrecta",Toast.LENGTH_LONG);

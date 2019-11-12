@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private Conexion conn = new Conexion();
     private Conexion c;
     public static final int VERSION  = 1;
-    private String msj = "";
+    private String msj = "",inspector = "";
     private CardView cvActualizar,cvCarga;
     private GestionBD gestion = null;
     private SQLiteDatabase db = null;
@@ -47,6 +47,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        inspector = getIntent().getExtras().getString("inspector");
+        Log.v("insoector",inspector);
+
         Button btn_Asistencia = findViewById(R.id.btn_Asistencia);
         CardView Cardview_Faltas = findViewById(R.id.cardview);
         cvActualizar = findViewById(R.id.cvActualizar);
@@ -56,7 +59,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         cardView_cobro.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                Intent intent = new Intent(MainActivity.this,ActivityCobro.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("inspector",inspector);
+                Intent intent = new Intent(MainActivity.this,ActivityCobro.class).putExtras(bundle);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
                 startActivity(intent);
                 return false;
@@ -71,7 +76,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         btn_Asistencia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,ActivityAsistencia.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("inspector",inspector);
+                Intent intent = new Intent(MainActivity.this,ActivityAsistencia.class).putExtras(bundle);
                 startActivity(intent);
             }
         });
@@ -84,47 +91,47 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     public void insertar() {
         msj = "";
-        if (!conn.search("http://192.168.15.5/getPermisionario.php").trim().equals("null")) {
-            if(!conn.search("http://192.168.15.5/getPermisionario.php").trim().equals("null")) {
+        if (!conn.search("http://192.168.15.10/getPermisionario.php").trim().equals("null")) {
+            if(!conn.search("http://192.168.15.10/getPermisionario.php").trim().equals("null")) {
                 eliminaRegistros(GestionBD.TABLE_PERMISIONARIO);
-                c.insetarRegistros("http://192.168.15.5/getPermisionario.php", GestionBD.TABLE_PERMISIONARIO);
+                c.insetarRegistros("http://192.168.15.10/getPermisionario.php", GestionBD.TABLE_PERMISIONARIO);
             }
-            if(!conn.search("http://192.168.15.5/getPuestos.php").trim().equals("null")) {
+            if(!conn.search("http://192.168.15.10/getPuestos.php").trim().equals("null")) {
                 eliminaRegistros(GestionBD.TABLE_PUESTO);
-                c.insetarRegistros("http://192.168.15.5/getPuestos.php", GestionBD.TABLE_PUESTO);
+                c.insetarRegistros("http://192.168.15.10/getPuestos.php", GestionBD.TABLE_PUESTO);
             }
-            if(!conn.search("http://192.168.15.5/getConfiguraciones.php").trim().equals("null")) {
+            if(!conn.search("http://192.168.15.10/getConfiguraciones.php").trim().equals("null")) {
                 eliminaRegistros(GestionBD.TABLE_CONFIGURACIONES);
-                c.insetarRegistros("http://192.168.15.5/getConfiguraciones.php", GestionBD.TABLE_CONFIGURACIONES);
+                c.insetarRegistros("http://192.168.15.10/getConfiguraciones.php", GestionBD.TABLE_CONFIGURACIONES);
             }
-            if(!conn.search("http://192.168.15.5/getCAdministrador.php").trim().equals("null")) {
+            if(!conn.search("http://192.168.15.10/getCAdministrador.php").trim().equals("null")) {
                 eliminaRegistros(GestionBD.TABLE_C_ADMINISTRADOR);
-                c.insetarRegistros("http://192.168.15.5/getCAdministrador.php", GestionBD.TABLE_C_ADMINISTRADOR);
+                c.insetarRegistros("http://192.168.15.10/getCAdministrador.php", GestionBD.TABLE_C_ADMINISTRADOR);
             }
-            if(!conn.search("http://192.168.15.5/getCGirosComerciales.php").trim().equals("null")) {
+            if(!conn.search("http://192.168.15.10/getCGirosComerciales.php").trim().equals("null")) {
                 eliminaRegistros(GestionBD.TABLE_C_GIROS_COMERCIALES);
-                c.insetarRegistros("http://192.168.15.5/getCGirosComerciales.php", GestionBD.TABLE_C_GIROS_COMERCIALES);
+                c.insetarRegistros("http://192.168.15.10/getCGirosComerciales.php", GestionBD.TABLE_C_GIROS_COMERCIALES);
             }
-            if(!conn.search("http://192.168.15.5/getCTianguis.php").trim().equals("null")) {
+            if(!conn.search("http://192.168.15.10/getCTianguis.php").trim().equals("null")) {
                 eliminaRegistros(GestionBD.TABLE_C_TIANGUIS);
-                c.insetarRegistros("http://192.168.15.5/getCTianguis.php", GestionBD.TABLE_C_TIANGUIS);
+                c.insetarRegistros("http://192.168.15.10/getCTianguis.php", GestionBD.TABLE_C_TIANGUIS);
             }
-            if(!conn.search("http://192.168.15.5/getCpoblacion.php").trim().equals("null")) {
+            if(!conn.search("http://192.168.15.10/getCpoblacion.php").trim().equals("null")) {
                 eliminaRegistros(GestionBD.TABLE_C_POBLACION);
-                c.insetarRegistros("http://192.168.15.5/getCpoblacion.php", GestionBD.TABLE_C_POBLACION);
+                c.insetarRegistros("http://192.168.15.10/getCpoblacion.php", GestionBD.TABLE_C_POBLACION);
             }
-            if(!conn.search("http://192.168.15.5/CZonaTianguis.php").trim().equals("null")) {
+            if(!conn.search("http://192.168.15.10/CZonaTianguis.php").trim().equals("null")) {
                 eliminaRegistros(GestionBD.TABLE_C_ZONA_TIANGUIS);
-                c.insetarRegistros("http://192.168.15.5/CZonaTianguis.php", GestionBD.TABLE_C_ZONA_TIANGUIS);
+                c.insetarRegistros("http://192.168.15.10/CZonaTianguis.php", GestionBD.TABLE_C_ZONA_TIANGUIS);
             }
             // aqui agrege lo mio
-            if(!conn.search("http://192.168.15.5/getCInspectores.php").trim().equals("null")) {
+            if(!conn.search("http://192.168.15.10/getCInspectores.php").trim().equals("null")) {
                 eliminaRegistros(GestionBD.TABLE_C_INSPECTORES);
-                c.insetarRegistros("http://192.168.15.5/getCInspectores.php", GestionBD.TABLE_C_INSPECTORES);
+                c.insetarRegistros("http://192.168.15.10/getCInspectores.php", GestionBD.TABLE_C_INSPECTORES);
             }
-            if(!conn.search("http://192.168.15.5/getCDependencias.php").trim().equals("null")) {
+            if(!conn.search("http://192.168.15.10/getCDependencias.php").trim().equals("null")) {
                 eliminaRegistros(GestionBD.TABLE_C_DEPENDENCIAS);
-                c.insetarRegistros("http://192.168.15.5/getCDependencias.php", GestionBD.TABLE_C_DEPENDENCIAS);
+                c.insetarRegistros("http://192.168.15.10/getCDependencias.php", GestionBD.TABLE_C_DEPENDENCIAS);
             }
             msj += "Se actualizo COMPLETAMENTE  ";
         } else
@@ -240,7 +247,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
                 JSONObject jo;
 
-                jo = jparser.realizarHttpRequest("http://192.168.15.5/insertAsistencias.php", "GET", asistencia);
+                jo = jparser.realizarHttpRequest("http://192.168.15.10/insertAsistencias.php", "GET", asistencia);
 
                 try {
                     Log.v("dato1",cursor.getInt(cursor.getColumnIndex("id")) + cursor.getColumnName(0));
@@ -269,7 +276,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
                 JSONObject jo;
 
-                jo = jparser.realizarHttpRequest("http://192.168.15.5/updateSaldo.php", "GET", asistencia);
+                jo = jparser.realizarHttpRequest("http://192.168.15.10/updateSaldo.php", "GET", asistencia);
 
                 try {
                     Log.v("dato saldo",cursor.getInt(cursor.getColumnIndex("id")) + " " + cursor.getColumnName(0));
@@ -303,7 +310,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
                 JSONObject jo;
 
-                jo = jparser.realizarHttpRequest("http://192.168.15.5/insertPagos.php", "GET", asistencia);
+                jo = jparser.realizarHttpRequest("http://192.168.15.10/insertPagos.php", "GET", asistencia);
 
                 try {
                     Log.v("dato1",cursor.getInt(cursor.getColumnIndex("id")) + cursor.getColumnName(0));

@@ -30,8 +30,10 @@ import com.perspective.tinaguisgdl.Beans.ItemPayment;
 import com.perspective.tinaguisgdl.DB.GestionBD;
 import com.perspective.tinaguisgdl.Model.DialogManager;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.Set;
 
 import static com.perspective.tinaguisgdl.ActivityAsistencia.mBixolonPrinter;
@@ -61,6 +63,7 @@ public class ActivityCobro extends AppCompatActivity implements View.OnClickList
     private static Bitmap bm1;
     private static Context context;
     private boolean pago = false;
+    private static NumberFormat format;
 
 
     @Override
@@ -95,10 +98,12 @@ public class ActivityCobro extends AppCompatActivity implements View.OnClickList
         rvAdapter = new AdapterPayment(this, listaPagos);
         rvPagos.setAdapter(rvAdapter);
 
-        bm = BitmapFactory.decodeResource(getResources(), R.drawable.admin);
+        bm = BitmapFactory.decodeResource(getResources(), R.drawable.escudo);
 
         bm1 = bm;
         context = ActivityCobro.this;
+        format = NumberFormat.getCurrencyInstance(Locale.CANADA);
+
     }
 
     @Override
@@ -243,38 +248,38 @@ public class ActivityCobro extends AppCompatActivity implements View.OnClickList
                                     BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
                                     false);
 
-                            mBixolonPrinter.printText("Metros: " + metros + "\n",
+                            mBixolonPrinter.printText("Metros: " + format.format(metros) + "\n",
                                     BixolonPrinter.ALIGNMENT_LEFT,
                                     BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
                                     BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
                                     false);
 
-                            mBixolonPrinter.printText("Costo metro lineal: " + costo + "\n",
+                            mBixolonPrinter.printText("Costo metro lineal: " + format.format(costo) + "\n",
                                     BixolonPrinter.ALIGNMENT_LEFT,
                                     BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
                                     BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
                                     false);
 
-                            mBixolonPrinter.printText("Subtotal: " + subtotal + "\n",
+                            mBixolonPrinter.printText("Subtotal: " + format.format(subtotal) + "\n",
                                     BixolonPrinter.ALIGNMENT_LEFT,
                                     BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
                                     BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
                                     false);
 
-                            mBixolonPrinter.printText("Descuento: " + desc1 + "\n",
+                            mBixolonPrinter.printText("Descuento: " + format.format(desc1) + "\n",
                                     BixolonPrinter.ALIGNMENT_LEFT,
                                     BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
                                     BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
                                     false);
 
-                            mBixolonPrinter.printText("Total: " + total + "\n",
+                            mBixolonPrinter.printText("Total: " + format.format(total) + "\n",
                                     BixolonPrinter.ALIGNMENT_LEFT,
                                     BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
                                     BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
                                     false);
 
-                            if(saldo > 0) {
-                                mBixolonPrinter.printText("Saldo a favor: " + saldoa + "\n",
+                            //if(saldo > 0) {
+                                mBixolonPrinter.printText("Saldo a favor: " + format.format(saldoa) + "\n",
                                         BixolonPrinter.ALIGNMENT_LEFT,
                                         BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
                                         BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
@@ -296,7 +301,7 @@ public class ActivityCobro extends AppCompatActivity implements View.OnClickList
                                             BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
                                             false);
                                 }*/
-                            }
+                            //}
 
                             mBixolonPrinter.lineFeed(3, false);
 

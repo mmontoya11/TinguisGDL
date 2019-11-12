@@ -1,7 +1,6 @@
 package com.perspective.tinaguisgdl;
 
 import android.bluetooth.BluetoothDevice;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
@@ -31,9 +30,12 @@ import com.perspective.tinaguisgdl.DB.GestionBD;
 import com.perspective.tinaguisgdl.Model.Asistencia;
 import com.perspective.tinaguisgdl.Model.DialogManager;
 import com.perspective.tinaguisgdl.Model.Tianguis;
+
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 public class ActivityAsistencia extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
@@ -50,7 +52,7 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
     private List<Integer> idPermisionario;
     private static Calendar calendar = null;
     private String mConnectedDeviceName = "";
-    private static String fecha = "",nombre = "",giro = "",puesto = "";
+    private static String fecha = "",nombre = "",giro = "",puesto = "",inspector = "";
     public static BixolonPrinter mBixolonPrinter;
     private Button btnImprimir;
     private static int idTianguis = 0,idPuesto = 0,desc1 = 0,idPermisio = 0;
@@ -61,11 +63,14 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
     private Asistencia asistencia = null;
     private CardView CardView_permisionario;
     private CardView CardView_datos_permisionario;
+    private static NumberFormat format;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_asistencia);
+
+        inspector = getIntent().getExtras().getString("inspector");
 
 
         final Context context = getApplicationContext();
@@ -151,13 +156,15 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
 
         tvFecha.setText(fecha);
 
-        bm = BitmapFactory.decodeResource(getResources(), R.drawable.admin);
+        bm = BitmapFactory.decodeResource(getResources(), R.drawable.escudo);
 
         bm1 = bm;
 
         costo = gestionBD.getCosto("",db);
 
         anno = calendar.get(Calendar.YEAR);
+
+        format = NumberFormat.getCurrencyInstance(Locale.CANADA);
 
     }
 
@@ -170,6 +177,7 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
                     tvTianguis.setText("Tianguis " + spTianguis.getSelectedItem().toString() + " del ");
                     idTianguis = idTia.get(position);
                     CardView_permisionario.setVisibility(View.VISIBLE);
+                    CardView_datos_permisionario.setVisibility(View.GONE);
                 }
                 break;
 
@@ -379,6 +387,12 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
                                     BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
                                     false);
 
+                            mBixolonPrinter.printText("Inspector: " + inspector +  "\n",
+                                    BixolonPrinter.ALIGNMENT_LEFT,
+                                    BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
+                                    BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
+                                    false);
+
                             mBixolonPrinter.printText("Tianguis: " + spTianguis.getSelectedItem().toString() + "\n",
                                     BixolonPrinter.ALIGNMENT_LEFT,
                                     BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
@@ -403,38 +417,38 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
                                     BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
                                     false);
 
-                            mBixolonPrinter.printText("Metros: " + metros + "\n",
+                            mBixolonPrinter.printText("Metros: " + format.format(metros) + "\n",
                                     BixolonPrinter.ALIGNMENT_LEFT,
                                     BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
                                     BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
                                     false);
 
-                            mBixolonPrinter.printText("Costo metro lineal: " + costo + "\n",
+                            mBixolonPrinter.printText("Costo metro lineal: " + format.format(costo) + "\n",
                                     BixolonPrinter.ALIGNMENT_LEFT,
                                     BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
                                     BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
                                     false);
 
-                            mBixolonPrinter.printText("Subtotal: " + subtotal + "\n",
+                            mBixolonPrinter.printText("Subtotal: " + format.format(subtotal) + "\n",
                                     BixolonPrinter.ALIGNMENT_LEFT,
                                     BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
                                     BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
                                     false);
 
-                            mBixolonPrinter.printText("Descuento: " + desc1 + "\n",
+                            mBixolonPrinter.printText("Descuento: " + format.format(desc1) + "\n",
                                     BixolonPrinter.ALIGNMENT_LEFT,
                                     BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
                                     BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
                                     false);
 
-                            mBixolonPrinter.printText("Total: " + total + "\n",
+                            mBixolonPrinter.printText("Total: " + format.format(total) + "\n",
                                     BixolonPrinter.ALIGNMENT_LEFT,
                                     BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
                                     BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
                                     false);
 
                             if(saldo > 0) {
-                                mBixolonPrinter.printText("Saldo a favor: " + saldoa + "\n",
+                                mBixolonPrinter.printText("Saldo a favor: " + format.format(saldoa) + "\n",
                                         BixolonPrinter.ALIGNMENT_LEFT,
                                         BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
                                         BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,

@@ -77,8 +77,10 @@ public class AdapterPayment extends RecyclerView.Adapter<AdapterPayment.ViewHold
 
         if(pago) {
             holder.mCobrar.setVisibility(View.GONE);
-        }else {
             holder.btnImprimir.setVisibility(View.VISIBLE);
+        }else {
+            holder.btnImprimir.setVisibility(View.GONE);
+            holder.mCobrar.setVisibility(View.VISIBLE);
         }
 
         holder.mCobrar.setOnClickListener(new View.OnClickListener() {
