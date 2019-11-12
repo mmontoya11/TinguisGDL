@@ -135,11 +135,29 @@
 
 
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="right"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:id="@+id/switch_textView_asistencia"
+                    android:textColor="@android:color/black"
+                    android:layout_height="wrap_content" />
+                <Switch
+                    android:id="@+id/switch_asistencia"
+                    android:checked="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:orientation="horizontal"
-                android:layout_marginTop="25dp"
                 android:layout_height="wrap_content">
                 <TextView
                     android:layout_width="wrap_content"
@@ -224,15 +242,7 @@
 
             </LinearLayout>
 
-            <Switch
-                android:layout_marginLeft="200dp"
-                android:text="Asistencia"
-                android:checked="true"
-                android:gravity="left"
-                android:layout_marginTop="20dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
+
 
             <Button
                 android:id="@+id/btnImprimir"

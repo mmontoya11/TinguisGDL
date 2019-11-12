@@ -9,9 +9,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.RequiresApi;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -21,8 +24,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.bixolon.printer.BixolonPrinter;
@@ -37,6 +42,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+
+import static com.perspective.tinaguisgdl.R.drawable.btn_rounded_red;
 
 public class ActivityAsistencia extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
@@ -64,6 +71,8 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
     private CardView CardView_permisionario;
     private CardView CardView_datos_permisionario;
     private static NumberFormat format;
+    private Switch SwitchAsistencia;
+    private TextView textViewAsistencia;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +83,7 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
 
 
         final Context context = getApplicationContext();
-        Button btn_AdminComer = findViewById(R.id.btn_rolero);
+        final Button btn_AdminComer = findViewById(R.id.btn_rolero);
         ImageView btn_BuscarComerciante = findViewById(R.id.btn_serch);
 
         btn_BuscarComerciante.setOnClickListener(new View.OnClickListener() {
@@ -102,12 +111,33 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
         btnImprimir = findViewById(R.id.btnImprimir);
         CardView_permisionario = findViewById(R.id.cardview_spinner_permisionario);
         CardView_datos_permisionario = findViewById(R.id.cardview_datos_permisionario);
+        SwitchAsistencia = findViewById(R.id.switch_asistencia);
+        textViewAsistencia = findViewById(R.id.switch_textView_asistencia);
+        textViewAsistencia.setText("Asistencia");
+
 
         tvTianguis.setText("");
         tvFecha.setText("");
         tvNombre.setText("");
         tvGiro.setText("");
         tvMetros.setText("");
+
+        SwitchAsistencia.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    textViewAsistencia.setText("Asistencia");
+                    btnImprimir.setBackgroundResource(R.drawable.btn_rounded);
+                    btnImprimir.setText("TOMAR ASISTENCIA");
+                }else {
+                    textViewAsistencia.setText("falta");
+                    btnImprimir.setText("TOMAR FALTA");
+                    btnImprimir.setBackgroundResource(btn_rounded_red);
+
+                }
+            }
+        });
 
 
         spTianguis.setOnItemSelectedListener(this);

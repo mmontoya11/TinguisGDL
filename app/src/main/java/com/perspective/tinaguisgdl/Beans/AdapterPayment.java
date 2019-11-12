@@ -102,6 +102,7 @@ public class AdapterPayment extends RecyclerView.Adapter<AdapterPayment.ViewHold
                 Log.v("pagos",ActivityCobro.gestion.insertarPagos(ActivityCobro.db,pagos) + " <-");
                 holder.btnImprimir.setVisibility(View.VISIBLE);
                 holder.mCobrar.setVisibility(View.GONE);
+                holder.mImageView.setImageResource(R.drawable.chceck);
             }
         });
 
@@ -110,9 +111,7 @@ public class AdapterPayment extends RecyclerView.Adapter<AdapterPayment.ViewHold
             public void onClick(View v) {
                 mBixolonPrinter = new BixolonPrinter(context, ActivityCobro.mHandler, null);
                 mBixolonPrinter.findBluetoothPrinters();
-
                 AlertDialog dialog = null;
-
                 ActivityCobro.showQrCodeDialog(dialog, context);
             }
         });
@@ -136,6 +135,7 @@ public class AdapterPayment extends RecyclerView.Adapter<AdapterPayment.ViewHold
         TextView mSaldoDespues;
         TextView mDescuento;
         TextView mCobroTotal;
+        ImageView mImageView;
 
 
         ViewHolder(View v) {
@@ -151,6 +151,7 @@ public class AdapterPayment extends RecyclerView.Adapter<AdapterPayment.ViewHold
             mDescuento = v.findViewById(R.id.tv_cobro_total);
             mCobroTotal = v.findViewById(R.id.tv_cobro_total);
             btnImprimir = v.findViewById(R.id.btnImprimir);
+            mImageView = v.findViewById(R.id.item_paymentImageView);
 
         }
     }
