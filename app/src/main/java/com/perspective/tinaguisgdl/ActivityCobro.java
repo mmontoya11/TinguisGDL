@@ -139,6 +139,8 @@ public class ActivityCobro extends AppCompatActivity implements View.OnClickList
                     saldoa = saldo;
                     Log.v("saldos",saldo + "");
 
+                    subtotal = total;
+
                     pago = gestion.consultaPagos(parseInt(dato[5]),fecha,db);
 
                     if(pago) {
@@ -279,19 +281,19 @@ public class ActivityCobro extends AppCompatActivity implements View.OnClickList
                                     false);
 
                             //if(saldo > 0) {
-                                mBixolonPrinter.printText("Saldo antes de cobro" + format.format(saldoa) + "\n",
+                                mBixolonPrinter.printText("Saldo antes de cobro: " + format.format(saldoa) + "\n",
                                         BixolonPrinter.ALIGNMENT_LEFT,
                                         BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
                                         BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
                                         false);
 
-                            mBixolonPrinter.printText("A cobrar en efectivo" + format.format(cobrol) + "\n",
+                            mBixolonPrinter.printText("A cobrar en efectivo: " + format.format(cobrol) + "\n",
                                     BixolonPrinter.ALIGNMENT_LEFT,
                                     BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
                                     BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
                                     false);
 
-                            mBixolonPrinter.printText("Saldo despues cobro" + format.format(saldo) + "\n",
+                            mBixolonPrinter.printText("Saldo despues cobro: " + format.format(saldo) + "\n",
                                     BixolonPrinter.ALIGNMENT_LEFT,
                                     BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
                                     BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,

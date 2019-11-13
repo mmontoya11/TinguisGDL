@@ -86,7 +86,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         gestion = new GestionBD(getApplicationContext(),"TianguisGDL",null,VERSION);
         db = gestion.getReadableDatabase();
         jparser = new JSONParser();
-
         //gestion.updatePunto(db,12);
 
     }
