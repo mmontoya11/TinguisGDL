@@ -14,14 +14,12 @@ public class ItemPayment {
     private String fecha;
 
     public double getSaldoDespues() {
-        return saldoDespues;
+        return this.SaldoDespues;
     }
 
     public void setSaldoDespues(double saldoDespues) {
-        this.saldoDespues = saldoDespues;
+        this.SaldoDespues = saldoDespues;
     }
-
-    private double saldoDespues;
 
     public ItemPayment() {
         NombrePermisionario = "";
@@ -31,13 +29,14 @@ public class ItemPayment {
         Saldo = 0;
         CobroLiquido = 0;
         CobroTotal = 0;
-        saldoDespues = 0d;
+        SaldoDespues = 0d;
+
         iPermisio = 0;
         pago = false;
         fecha = "";
     }
 
-    public ItemPayment(String nombrePermisionario, int idPuesto, String tianguis, double metroLineal, double saldo, double cobroLiquido, double cobroTotal,double saldoDespues,int iPermisio, boolean pago,String fecha) {
+    public ItemPayment(String nombrePermisionario, int idPuesto, String tianguis, double metroLineal, double saldo, double cobroLiquido, double cobroTotal,double saldoDespues1,int iPermisio, boolean pago,String fecha) {
         NombrePermisionario = nombrePermisionario;
         this.idPuesto = idPuesto;
         Tianguis = tianguis;
@@ -45,7 +44,7 @@ public class ItemPayment {
         Saldo = saldo;
         CobroLiquido = cobroLiquido;
         CobroTotal = cobroTotal;
-        SaldoDespues = saldoDespues;
+        SaldoDespues = saldoDespues1;
         this.iPermisio = iPermisio;
         this.pago = pago;
         this.fecha = fecha;

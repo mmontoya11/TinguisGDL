@@ -88,18 +88,26 @@ public class AdapterPayment extends RecyclerView.Adapter<AdapterPayment.ViewHold
             @Override
             public void onClick(View v) {
                 Log.v("click","button");
-                Double saldo = 0d,saldoa = 0d,total = 0d;
+                Double saldo = 0d,saldoa = 0d,total = 0d,cobroL;
 
                 saldo = mDataSet.get(position).getSaldoDespues();
                 saldoa = mDataSet.get(position).getSaldo();
                 total = mDataSet.get(position).getCobroTotal();
+                cobroL = mDataSet.get(position).getCobroLiquido();
+
+
+                Log.e("saldos",saldo + " " + saldoa);
+
+                if(mDataSet.get(position).NombrePermisionario.contains("Rol")){
+                    GestionBD.updatePunto(ActivityCobro.db,mDataSet.get(position).getIPermisio());
+                }
 
 
                 ContentValues cv = new ContentValues();
                 cv.put("saldo",saldo);
                 cv.put("estatus","N");
                 System.err.print(ActivityCobro.db.update(ActivityCobro.gestion.TABLE_PERMISIONARIO,cv,"id = " + mDataSet.get(position).getIPermisio(),null) + " update");
-                Pagos pagos = new Pagos(mDataSet.get(position).getIPermisio(),mDataSet.get(position).getIdPuesto(),"PAGO","N",total,saldoa,0,saldo,mDataSet.get(position).getFecha());
+                Pagos pagos = new Pagos(mDataSet.get(position).getIPermisio(),mDataSet.get(position).getIdPuesto(),"PAGO","N",total,saldoa,cobroL,saldo,mDataSet.get(position).getFecha());
                 Log.v("pagos",ActivityCobro.gestion.insertarPagos(ActivityCobro.db,pagos) + " <-");
                 holder.btnImprimir.setVisibility(View.VISIBLE);
                 holder.mCobrar.setVisibility(View.GONE);

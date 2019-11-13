@@ -87,6 +87,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         db = gestion.getReadableDatabase();
         jparser = new JSONParser();
 
+        //gestion.updatePunto(db,12);
+
     }
 
     public void insertar() {
@@ -222,6 +224,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             mandarAsistencia();
             actualizarSaldos();
             mandarPagos();
+            actualizaPuntos();
             return true;
         }
 
@@ -318,6 +321,34 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                         ContentValues cv = new ContentValues();
                         cv.put("estatus", "S");
                         Log.v("update",db.update(GestionBD.TABLE_PAGOS, cv, "id = " + cursor.getInt(0), null) + " update");
+                    }
+                }catch(JSONException e) {
+                    System.err.println(e.getMessage());
+                }
+
+            } while(cursor.moveToNext());
+        }
+    }
+
+    public void actualizaPuntos() {
+        String sql = "SELECT * FROM " + GestionBD.TABLE_PERMISIONARIO + " where estatus = 'F'";
+        Cursor cursor = db.rawQuery(sql,null);
+        Log.v("total" , cursor.getCount() + " count");
+        if(cursor.moveToFirst()) {
+            do {
+                ArrayList<NameValuePair> asistencia = new ArrayList<>();
+                asistencia.add(new BasicNameValuePair("iPermisionar",cursor.getInt(cursor.getColumnIndex("id")) + " "));
+
+                JSONObject jo;
+
+                jo = jparser.realizarHttpRequest("http://192.168.15.10/insertPuntos.php", "GET", asistencia);
+
+                try {
+                    Log.v("dato1",cursor.getInt(cursor.getColumnIndex("id")) + cursor.getColumnName(0));
+                    if(jo.getInt("estatus") == 1) {
+                        ContentValues cv = new ContentValues();
+                        cv.put("estatus", "S");
+                        Log.v("update",db.update(GestionBD.TABLE_PERMISIONARIO, cv, "id = " + cursor.getInt(0), null) + " update");
                     }
                 }catch(JSONException e) {
                     System.err.println(e.getMessage());

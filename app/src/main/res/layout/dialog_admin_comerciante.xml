@@ -21,20 +21,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/linea"/>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
+        android:layout_height="67dp"
         android:background="@android:color/white"
+        android:gravity="center"
         android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nombre:  "/>
+            android:text="Nombre:  " />
+
         <Spinner
+            android:id="@+id/spRoll"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="match_parent" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -47,9 +50,10 @@
             android:layout_height="wrap_content"
             android:text="Giro:  "/>
         <EditText
+            android:id="@+id/etGiro"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Verduras"/>
+            android:text=""/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -62,9 +66,10 @@
             android:layout_height="wrap_content"
             android:text="Metros:  "/>
         <EditText
+            android:id="@+id/etMtr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="7 Mts"/>
+            android:text=""/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -73,14 +78,15 @@
         android:background="@android:color/white"
         android:orientation="horizontal">
         <Button
+            android:id="@+id/btnCancelar"
             android:layout_width="wrap_content"
             android:textColor="@android:color/white"
             android:text="Cancelar"
             android:layout_marginRight="10dp"
-
             android:layout_height="wrap_content"
             android:background="@drawable/btn_rounded"/>
         <Button
+            android:id="@+id/btnImprimir"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"

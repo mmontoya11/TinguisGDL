@@ -248,7 +248,7 @@ public class ActivityCobro extends AppCompatActivity implements View.OnClickList
                                     BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
                                     false);
 
-                            mBixolonPrinter.printText("Metros: " + format.format(metros) + "\n",
+                            mBixolonPrinter.printText("Metros: " + metros + "\n",
                                     BixolonPrinter.ALIGNMENT_LEFT,
                                     BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
                                     BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
@@ -272,18 +272,30 @@ public class ActivityCobro extends AppCompatActivity implements View.OnClickList
                                     BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
                                     false);
 
-                            mBixolonPrinter.printText("Total: " + format.format(total) + "\n",
+                            mBixolonPrinter.printText("Total a cobrar: " + format.format(total) + "\n",
                                     BixolonPrinter.ALIGNMENT_LEFT,
                                     BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
                                     BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
                                     false);
 
                             //if(saldo > 0) {
-                                mBixolonPrinter.printText("Saldo a favor: " + format.format(saldoa) + "\n",
+                                mBixolonPrinter.printText("Saldo antes de cobro" + format.format(saldoa) + "\n",
                                         BixolonPrinter.ALIGNMENT_LEFT,
                                         BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
                                         BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
                                         false);
+
+                            mBixolonPrinter.printText("A cobrar en efectivo" + format.format(cobrol) + "\n",
+                                    BixolonPrinter.ALIGNMENT_LEFT,
+                                    BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
+                                    BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
+                                    false);
+
+                            mBixolonPrinter.printText("Saldo despues cobro" + format.format(saldo) + "\n",
+                                    BixolonPrinter.ALIGNMENT_LEFT,
+                                    BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
+                                    BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
+                                    false);
 
                                 /*if((saldo) > 0) {
 

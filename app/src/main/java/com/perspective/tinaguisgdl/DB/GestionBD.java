@@ -258,4 +258,20 @@ public class GestionBD extends SQLiteOpenHelper {
         return res;
     }
 
+    public static void updatePunto(SQLiteDatabase db,int idPermisio) {
+        String sql = "SELECT puntos FROM " + TABLE_PERMISIONARIO + " WHERE id = " + idPermisio;
+        Log.v("sql",sql);
+        Cursor cursor = db.rawQuery(sql,null);
+        int puntos = 0;
+        if(cursor.moveToFirst()) {
+            do {
+                puntos = cursor.getInt(cursor.getColumnIndex("puntos")) + 1;
+            }while(cursor.moveToNext());
+        }
+        ContentValues cv = new ContentValues();
+        cv.put("puntos",puntos);
+        cv.put("estatus","F");
+        db.update(TABLE_PERMISIONARIO,cv,null,null);
+    }
+
 }

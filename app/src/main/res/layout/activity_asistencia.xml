@@ -261,22 +261,14 @@
                 android:text="ceder lugar a un rolero"
                 android:background="@drawable/btn_rounded_alt"/>
             <Button
-                android:layout_width="match_parent"
-                android:visibility="gone"
-                android:layout_marginTop="25dp"
-                android:textColor="@android:color/white"
-                android:background="@drawable/btn_rounded"
-                android:layout_height="wrap_content"
-                android:text="Imprimir"/>
-            <Button
-                android:layout_width="match_parent"
-                android:visibility="gone"
+                android:id="@+id/btnReImprimir"
                 android:layout_marginTop="10dp"
-                android:textColor="@android:color/white"
-                android:background="@drawable/btn_rounded_green"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Sigueinte"/>
-
+                android:textColor="@android:color/white"
+                android:text="Re-imprimir ticket"
+                android:visibility="gone"
+                android:background="@drawable/btn_rounded_green"/>
 
         </LinearLayout>
 

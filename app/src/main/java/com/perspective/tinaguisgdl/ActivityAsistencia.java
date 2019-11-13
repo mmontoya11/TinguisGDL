@@ -25,6 +25,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -51,15 +52,18 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
     private GestionBD gestionBD = null;
     private List<Tianguis> tianguis = null;
     private List<String> tia = null;
+    private List<String> roll = null;
+    private List<String> giros = new ArrayList<>();
     private List<Integer> idTia = null;
-    private ArrayAdapter<String> adapter = null,adapterC = null;
+    private List<Integer> idPR = new ArrayList<>();
+    private ArrayAdapter<String> adapter = null,adapterC = null,adapterRoll = null;
     private SQLiteDatabase db = null;
     private List<String> permisionario = null;
     private TextView tvTianguis,tvFecha,tvNombre,tvGiro,tvMetros;
     private List<Integer> idPermisionario;
     private static Calendar calendar = null;
     private String mConnectedDeviceName = "";
-    private static String fecha = "",nombre = "",giro = "",puesto = "",inspector = "";
+    private static String fecha = "",nombre = "",giro = "",puesto = "",inspector = "",nrol = "";
     public static BixolonPrinter mBixolonPrinter;
     private Button btnImprimir;
     private static int idTianguis = 0,idPuesto = 0,desc1 = 0,idPermisio = 0;
@@ -73,17 +77,26 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
     private static NumberFormat format;
     private Switch SwitchAsistencia;
     private TextView textViewAsistencia;
+    private int EstadoAsistencia = 1;
+    private Button btn_AdminComer, btnReimprimir;
+    private TextView EstadoComerciante;
+    private ArrayList<Asistencia> ArrayAsistencia ;
+    private Spinner spRoll;
+    private EditText etGiro,etMts;
+    private Button btnImprimir1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_asistencia);
-
+        ArrayAsistencia = new ArrayList<>();
         inspector = getIntent().getExtras().getString("inspector");
 
 
         final Context context = getApplicationContext();
-        final Button btn_AdminComer = findViewById(R.id.btn_rolero);
+        btn_AdminComer = findViewById(R.id.btn_rolero);
+        btnReimprimir= findViewById(R.id.btnReImprimir);
+        EstadoComerciante = findViewById(R.id.tvStatusTicket);
         ImageView btn_BuscarComerciante = findViewById(R.id.btn_serch);
 
         btn_BuscarComerciante.setOnClickListener(new View.OnClickListener() {
@@ -97,6 +110,9 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
         btn_AdminComer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(SwitchAsistencia.isChecked()) {
+                    SwitchAsistencia.setChecked(false);
+                }
                 showDialogAdminComer();
             }
         });
@@ -116,6 +132,7 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
         textViewAsistencia.setText("Asistencia");
 
 
+
         tvTianguis.setText("");
         tvFecha.setText("");
         tvNombre.setText("");
@@ -130,12 +147,15 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
                     textViewAsistencia.setText("Asistencia");
                     btnImprimir.setBackgroundResource(R.drawable.btn_rounded);
                     btnImprimir.setText("TOMAR ASISTENCIA");
+                    EstadoAsistencia = 1;
                 }else {
                     textViewAsistencia.setText("Falta");
                     btnImprimir.setText("TOMAR FALTA");
                     btnImprimir.setBackgroundResource(btn_rounded_red);
+                    EstadoAsistencia = 0 ;
 
                 }
+                Log.v("estado",EstadoAsistencia + " ");
             }
         });
 
@@ -172,14 +192,17 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
         }
 
         permisionario = new ArrayList<>();
+        roll = new ArrayList<>();
         adapter = new ArrayAdapter<>(getApplicationContext(),R.layout.spinner_color_layout,tia);
         adapterC = new ArrayAdapter<>(getApplicationContext(),R.layout.spinner_dropdown_layout,permisionario);
+        adapterRoll = new ArrayAdapter<>(getApplication(),R.layout.spinner_dropdown_layout,roll);
         idPermisionario = new ArrayList<>();
 
 
 
         spTianguis.setAdapter(adapter);
         spPermisionario.setAdapter(adapterC);
+
 
         calendar = Calendar.getInstance();
         fecha = calendar.get(Calendar.DAY_OF_MONTH) + "/" + (calendar.get(Calendar.MONTH)+1) + "/" + calendar.get(Calendar.YEAR);
@@ -195,6 +218,8 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
         anno = calendar.get(Calendar.YEAR);
 
         format = NumberFormat.getCurrencyInstance(Locale.CANADA);
+
+        getAllComerciantesRoll();
 
     }
 
@@ -214,6 +239,31 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
             case R.id.spPermisionario:
                 if(position > 0) {
                     datosPermisionario(idTia.get(spTianguis.getSelectedItemPosition()),idPermisionario.get(position));
+
+
+                    for(int i = 0; i < ArrayAsistencia.size(); i++){
+                        if(ArrayAsistencia.get(i).getIdPermisionario() == idPermisionario.get(position)){
+                            if(ArrayAsistencia.get(i).getEstado()==1){
+                                btnImprimir.setVisibility(View.GONE);
+                                btn_AdminComer.setVisibility(View.GONE);
+                                btnReimprimir.setVisibility(View.VISIBLE);
+                                EstadoComerciante.setText("ASISTENCIA");
+                            }
+                            else{
+                                EstadoComerciante.setText("FALTA");
+                                btnImprimir.setVisibility(View.GONE);
+                                btn_AdminComer.setVisibility(View.GONE);
+                                btnReimprimir.setVisibility(View.GONE);
+                            }
+                        }else {
+                            btnImprimir.setBackgroundResource(R.drawable.btn_rounded);
+                            btnImprimir.setVisibility(View.VISIBLE);
+                            btn_AdminComer.setVisibility(View.VISIBLE);
+                            btnReimprimir.setVisibility(View.GONE);
+                            EstadoComerciante.setText("Ticket sin emitir");
+                        }
+                    }
+
                     CardView_datos_permisionario.setVisibility(View.VISIBLE);
                 }
                 break;
@@ -233,6 +283,69 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
         AlertDialog.Builder builder = new AlertDialog.Builder(ActivityAsistencia.this);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_admin_comerciante, null);
+        spRoll = view.findViewById(R.id.spRoll);
+        etGiro = view.findViewById(R.id.etGiro);
+        spRoll.setAdapter(adapterRoll);
+        etMts = view.findViewById(R.id.etMtr);
+        btnImprimir1 = view.findViewById(R.id.btnImprimir);
+        etMts.setText(String.valueOf(metros));
+        spRoll.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                etGiro.setText(giros.get(position));
+                nrol = spRoll.getSelectedItem().toString();
+                idPermisio = idPR.get(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        btnImprimir1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                giro = etGiro.getText().toString();
+                subtotal = Double.parseDouble(tvMetros.getText().toString())*costo;
+                total = subtotal;
+                mBixolonPrinter = new BixolonPrinter(ActivityAsistencia.this, mHandler, null);
+                mBixolonPrinter.findBluetoothPrinters();
+
+                AlertDialog dialog = null;
+
+                showQrCodeDialogRoll(dialog,ActivityAsistencia.this,0);
+
+                //gestionBD.updatePunto(db,idPR.get(spRoll.getSelectedItemPosition()));
+
+                asistencia = new Asistencia(anno,idTianguis,idPermisio,EstadoAsistencia,idPuesto,fecha,"N");
+
+                if(asistencia.getEstado()==1){
+                    btnImprimir.setBackgroundResource(R.drawable.btn_rounded_green);
+                    btnImprimir.setVisibility(View.GONE);
+                    btn_AdminComer.setVisibility(View.GONE);
+                    btnReimprimir.setVisibility(View.VISIBLE);
+                    EstadoComerciante.setText("ASISTENCIA");
+
+                }else if(asistencia.getEstado()==0){
+
+                    btn_AdminComer.setVisibility(View.GONE);
+                    btnImprimir.setVisibility(View.GONE);
+                    EstadoComerciante.setText("FALTA");
+
+                }
+
+                if(gestionBD.consultarAsistencia(asistencia,db) == 0) {
+
+                    gestionBD.insertarAsistencia(db, asistencia);
+
+                }
+                else {
+                    Log.v("entro","no inserto, hay un registro");
+                    System.err.print("no inserto, hay un registro");
+                }
+            }
+        });
         builder.setView(view);
         AlertDialog dialog = builder.create();
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -317,7 +430,28 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
 
                 showQrCodeDialog(dialog, ActivityAsistencia.this, 0);
 
-                asistencia = new Asistencia(anno,idTianguis,idPermisio,1,idPuesto,fecha,"N");
+                //Estado: 0 = falta
+                //Estado: 1 = Asistencia
+
+
+                asistencia = new Asistencia(anno,idTianguis,idPermisio,EstadoAsistencia,idPuesto,fecha,"N");
+
+                ArrayAsistencia.add(asistencia);
+
+                if(asistencia.getEstado()==1){
+                    btnImprimir.setBackgroundResource(R.drawable.btn_rounded_green);
+                    btnImprimir.setVisibility(View.GONE);
+                    btn_AdminComer.setVisibility(View.GONE);
+                    btnReimprimir.setVisibility(View.VISIBLE);
+                    EstadoComerciante.setText("ASISTENCIA");
+
+                }else if(asistencia.getEstado()==0){
+
+                    btn_AdminComer.setVisibility(View.GONE);
+                    btnImprimir.setVisibility(View.GONE);
+                    EstadoComerciante.setText("FALTA");
+
+                }
 
                 if(gestionBD.consultarAsistencia(asistencia,db) == 0) {
                     saldoa = saldo;
@@ -332,7 +466,9 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
                     cv.put("saldo",saldo);
                     cv.put("estatus","N");
                     System.err.print(db.update(gestionBD.TABLE_PERMISIONARIO,cv,"id = " + idPermisio,null) + " update");*/
+
                     gestionBD.insertarAsistencia(db, asistencia);
+
                 }
                 else {
                     Log.v("entro","no inserto, hay un registro");
@@ -447,7 +583,7 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
                                     BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
                                     false);
 
-                            mBixolonPrinter.printText("Metros: " + format.format(metros) + "\n",
+                            mBixolonPrinter.printText("Metros: " + metros + "\n",
                                     BixolonPrinter.ALIGNMENT_LEFT,
                                     BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
                                     BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
@@ -478,7 +614,7 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
                                     false);
 
                             //if(saldo > 0) {
-                                mBixolonPrinter.printText("Saldo a favor: " + format.format(saldoa) + "\n",
+                                mBixolonPrinter.printText("Saldo a favor antes de cobro: " + format.format(saldoa) + "\n",
                                         BixolonPrinter.ALIGNMENT_LEFT,
                                         BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
                                         BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
@@ -518,6 +654,134 @@ public class ActivityAsistencia extends AppCompatActivity implements AdapterView
         dialog.show();
     }
 
+    public void getAllComerciantesRoll() {
+        String sql = "SELECT b.id,b.nombres,b.apellidoP,b.apellidoM,c.vchGiroComercial" +
+                " FROM " + GestionBD.TABLE_PUESTO + " a " +
+                "JOIN " + GestionBD.TABLE_PERMISIONARIO + " b on a.iPERMISIO = b.id " +
+                "JOIN " + GestionBD.TABLE_C_GIROS_COMERCIALES + " c on c.id=a.smlGIRO1 " +
+                "where a.tynestatus = 'R'";
+        Log.v("sql",sql);
+        Cursor cursor = db.rawQuery(sql,null);
+        if(cursor.moveToFirst()) {
+            do { Log.v("datos",cursor.getString(cursor.getColumnIndex("nombres")));
+                roll.add(cursor.getString(cursor.getColumnIndex("nombres")) + " " + cursor.getString(cursor.getColumnIndex("apellidoP")) + " " + cursor.getString(cursor.getColumnIndex("apellidoM")));
+                giros.add(cursor.getString(cursor.getColumnIndex("vchGiroComercial")));
+                idPR.add(cursor.getInt(cursor.getColumnIndex("id")));
+            }while(cursor.moveToNext());
+        }
+        cursor.close();
+        adapterRoll.notifyDataSetChanged();
+    }
+
+    static void showQrCodeDialogRoll(AlertDialog dialog, final Context context,final int desc) {
+        calendar = Calendar.getInstance();
+        if (dialog == null) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            final View layout = inflater.inflate(R.layout.dialog_print_qrcode, null);
+
+            dialog = new AlertDialog.Builder(context).setView(layout).setTitle("QR Code")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int which) {
+                            String data = metros+"|"+fecha + "|"+idTianguis + "|" + idPuesto + "|Rol/" + nrol + "|" + idPermisio;
+
+
+                            mBixolonPrinter.setSingleByteFont(BixolonPrinter.CODE_PAGE_1252_LATIN1);
+
+                            mBixolonPrinter.setPrintDirection(BixolonPrinter.DIRECTION_0_DEGREE_ROTATION);
+                            mBixolonPrinter.setAbsoluteVerticalPrintPosition(200);
+                            mBixolonPrinter.setAbsolutePrintPosition(120);
+                            mBixolonPrinter.printBitmap(bm1, BixolonPrinter.ALIGNMENT_CENTER, 200, 65, false);
+
+                            mBixolonPrinter.printText("Municipio de Guadalajara\n",
+                                    BixolonPrinter.ALIGNMENT_LEFT,
+                                    BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
+                                    BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
+                                    false);
+
+                            mBixolonPrinter.printText("Fecha: " + fecha + " " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) +  "\n",
+                                    BixolonPrinter.ALIGNMENT_LEFT,
+                                    BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
+                                    BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
+                                    false);
+
+                            mBixolonPrinter.printText("Inspector: " + inspector +  "\n",
+                                    BixolonPrinter.ALIGNMENT_LEFT,
+                                    BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
+                                    BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
+                                    false);
+
+                            mBixolonPrinter.printText("Tianguis: " + spTianguis.getSelectedItem().toString() + "\n",
+                                    BixolonPrinter.ALIGNMENT_LEFT,
+                                    BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
+                                    BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
+                                    false);
+
+                            mBixolonPrinter.printText("Comerciante: Rol/" + nrol + " \n",
+                                    BixolonPrinter.ALIGNMENT_LEFT,
+                                    BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
+                                    BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
+                                    false);
+
+                            mBixolonPrinter.printText("Giro: " + giro + "\n",
+                                    BixolonPrinter.ALIGNMENT_LEFT,
+                                    BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
+                                    BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
+                                    false);
+
+                            mBixolonPrinter.printText("Puesto: " + puesto + "\n",
+                                    BixolonPrinter.ALIGNMENT_LEFT,
+                                    BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
+                                    BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
+                                    false);
+
+                            mBixolonPrinter.printText("Metros: " + metros + "\n",
+                                    BixolonPrinter.ALIGNMENT_LEFT,
+                                    BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
+                                    BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
+                                    false);
+
+                            mBixolonPrinter.printText("Costo metro lineal: " + format.format(costo) + "\n",
+                                    BixolonPrinter.ALIGNMENT_LEFT,
+                                    BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
+                                    BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
+                                    false);
+
+                            mBixolonPrinter.printText("Subtotal: " + format.format(subtotal) + "\n",
+                                    BixolonPrinter.ALIGNMENT_LEFT,
+                                    BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
+                                    BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
+                                    false);
+
+                            mBixolonPrinter.printText("Descuento: " + format.format(desc1) + "\n",
+                                    BixolonPrinter.ALIGNMENT_LEFT,
+                                    BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
+                                    BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
+                                    false);
+
+                            mBixolonPrinter.printText("Total: " + format.format(total) + "\n",
+                                    BixolonPrinter.ALIGNMENT_LEFT,
+                                    BixolonPrinter.TEXT_ATTRIBUTE_FONT_A | BixolonPrinter.TEXT_ATTRIBUTE_EMPHASIZED,
+                                    BixolonPrinter.TEXT_SIZE_HORIZONTAL1 | BixolonPrinter.TEXT_SIZE_VERTICAL1,
+                                    false);
+
+
+
+                            mBixolonPrinter.printQrCode(data, BixolonPrinter.ALIGNMENT_CENTER, BixolonPrinter.QR_CODE_MODEL2, 8, true);
+                            mBixolonPrinter.lineFeed(3, false);
+
+
+                            mBixolonPrinter.disconnect();
+                        }
+                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }).create();
+        }
+        dialog.show();
+    }
 
 
 }
